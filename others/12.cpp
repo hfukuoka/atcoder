@@ -134,54 +134,56 @@ struct PrimeFact {
 };
 
 int main(){
-    ll n, k;
-    cin >> n >> k;
-    vll d(k);
-    set<char> st;
-    rep(i, k){
-        cin >> d[i];
-        st.insert('0'+d[i]);
+    ll H, W;
+    cin >> H >> W;
+    vector<vector<char>> a(H, vector<char>(W));
+    map<char, ll> m;
+    rep(i, H){
+        rep(j, W){
+            cin >> a[i][j];
+            m[a[i][j]]++;
+        }
     }
-    ll m = 1;
-    while(1){
-        m *= 10;
-        if(m>n)break;
-    }
-    while(n<m){
-        ll x = n;
-        string s = to_string(x);
-        ll size = s.size();
-        bool ok = true;
-        rep(j, size){
-            if(st.count(s[j])){
+    bool ok = true;
+    if(H%2==0 && W%2==0){
+        for(auto p : m){
+            if(p.second%4!=0)ok = false;
+        }
+    }else if(H%2==0 && W%2!=0){
+        ll cnt = 0;
+        for(auto p : m){
+            if(p.second%4==2){
+                cnt++;
+            }else if(p.second%4!=0){
                 ok = false;
             }
         }
-        if(ok){
-            cout << x << endl;
-            return 0;
+        if(cnt>H/2)ok = false;
+    }else if(H%2!=0 && W%2==0){
+        ll cnt = 0;
+        for(auto p : m){
+            if(p.second%4==2){
+                cnt++;
+            }else if(p.second%4!=0){
+                ok = false;
+            }
         }
-        n++;
-    }
-    if(st.count('0')){
-        int mnum = 9;
-        for(int i=9; i>0; --i){
-            if(!st.count('0'+i))chmin(mnum, i);
+        if(cnt>W/2)ok = false;
+    }else{
+        ll c1 = 0;
+        ll c2 = 0;
+        for(auto p : m){
+            if(p.second%4==1){
+                c1++;
+            }else if(p.second%4==3){
+                c1++;
+                c2++;
+            }else if(p.second%4==2){
+                c2++;
+            }
         }
-        ll ans = 0;
-        ll k=1;
-        while(ans<m){
-            ans += mnum * k;
-            k *= 10;
-        }
-        cout << ans << endl;
-        return 0;
+        if(c1>1 || c2>(H+W)/2-1)ok = false;
     }
-    int mnum = 9;
-    for(int i=9; i>0; --i){
-        if(!st.count('0'+i))chmin(mnum, i);
-    }
-    ll ans = m * mnum;
-    cout << ans << endl;
+    cout << (ok ? "Yes" : "No") << endl;
     return 0;
 }

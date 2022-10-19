@@ -134,54 +134,43 @@ struct PrimeFact {
 };
 
 int main(){
-    ll n, k;
-    cin >> n >> k;
-    vll d(k);
-    set<char> st;
-    rep(i, k){
-        cin >> d[i];
-        st.insert('0'+d[i]);
+    ll n;
+    cin >> n;
+    ll x = n;
+    vll a;
+    ll cnt = 0;
+    while(x!=0){
+        if(x==1){
+            a.push_back(x);
+            break;
+        }
+        if(x==-1){
+            a.push_back(1);
+            a.push_back(1);
+            break;
+        }
+        ll p=x/(-2), q=x%(-2);
+        if(q<0){
+            if(p>0)p++;
+            q=1;
+        }
+        //cout << "x:" << x << " p:" << p << " q:" << q << endl;
+        a.push_back(q);
+        x = p;
+        // if(cnt>3){ 
+        //     cout << "l:" << a.size() << endl;
+        //     return 0;
+        // }
+        cnt++;
     }
-    ll m = 1;
-    while(1){
-        m *= 10;
-        if(m>n)break;
-    }
-    while(n<m){
-        ll x = n;
-        string s = to_string(x);
-        ll size = s.size();
-        bool ok = true;
-        rep(j, size){
-            if(st.count(s[j])){
-                ok = false;
-            }
-        }
-        if(ok){
-            cout << x << endl;
-            return 0;
-        }
-        n++;
-    }
-    if(st.count('0')){
-        int mnum = 9;
-        for(int i=9; i>0; --i){
-            if(!st.count('0'+i))chmin(mnum, i);
-        }
-        ll ans = 0;
-        ll k=1;
-        while(ans<m){
-            ans += mnum * k;
-            k *= 10;
-        }
-        cout << ans << endl;
+    if(a.size()==0){
+        cout << 0 << endl;
         return 0;
     }
-    int mnum = 9;
-    for(int i=9; i>0; --i){
-        if(!st.count('0'+i))chmin(mnum, i);
+    reverse(all(a));
+    for(auto e : a){
+        cout << e;
     }
-    ll ans = m * mnum;
-    cout << ans << endl;
+    cout << endl;
     return 0;
 }

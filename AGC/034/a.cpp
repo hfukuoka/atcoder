@@ -134,54 +134,6 @@ struct PrimeFact {
 };
 
 int main(){
-    ll n, k;
-    cin >> n >> k;
-    vll d(k);
-    set<char> st;
-    rep(i, k){
-        cin >> d[i];
-        st.insert('0'+d[i]);
-    }
-    ll m = 1;
-    while(1){
-        m *= 10;
-        if(m>n)break;
-    }
-    while(n<m){
-        ll x = n;
-        string s = to_string(x);
-        ll size = s.size();
-        bool ok = true;
-        rep(j, size){
-            if(st.count(s[j])){
-                ok = false;
-            }
-        }
-        if(ok){
-            cout << x << endl;
-            return 0;
-        }
-        n++;
-    }
-    if(st.count('0')){
-        int mnum = 9;
-        for(int i=9; i>0; --i){
-            if(!st.count('0'+i))chmin(mnum, i);
-        }
-        ll ans = 0;
-        ll k=1;
-        while(ans<m){
-            ans += mnum * k;
-            k *= 10;
-        }
-        cout << ans << endl;
-        return 0;
-    }
-    int mnum = 9;
-    for(int i=9; i>0; --i){
-        if(!st.count('0'+i))chmin(mnum, i);
-    }
-    ll ans = m * mnum;
-    cout << ans << endl;
+
     return 0;
 }

@@ -134,54 +134,37 @@ struct PrimeFact {
 };
 
 int main(){
-    ll n, k;
-    cin >> n >> k;
-    vll d(k);
-    set<char> st;
-    rep(i, k){
-        cin >> d[i];
-        st.insert('0'+d[i]);
-    }
-    ll m = 1;
-    while(1){
-        m *= 10;
-        if(m>n)break;
-    }
-    while(n<m){
-        ll x = n;
-        string s = to_string(x);
-        ll size = s.size();
-        bool ok = true;
-        rep(j, size){
-            if(st.count(s[j])){
-                ok = false;
+    string s;
+    cin >> s;
+    ll a=0;
+    ll n = s.size();
+    ll ans = 0;
+    string t;
+    rep(i, n){
+        if(i==0){
+            t.push_back(s[0]);
+            continue;
+        }
+        if(s[i]=='C'){
+            if(s[i-1]=='B'){
+                t.pop_back();
+                t.push_back('D');
+            }else{
+                t.push_back('C');
             }
+        }else{
+            t.push_back(s[i]);
         }
-        if(ok){
-            cout << x << endl;
-            return 0;
-        }
-        n++;
     }
-    if(st.count('0')){
-        int mnum = 9;
-        for(int i=9; i>0; --i){
-            if(!st.count('0'+i))chmin(mnum, i);
+    n = (ll)t.size();
+    rep(i, n){
+        //cout << t[i] << endl;
+        if(t[i]=='B'||t[i]=='C')a=0;
+        else{
+            if(t[i]=='A')a++;
+            else ans += a;
         }
-        ll ans = 0;
-        ll k=1;
-        while(ans<m){
-            ans += mnum * k;
-            k *= 10;
-        }
-        cout << ans << endl;
-        return 0;
     }
-    int mnum = 9;
-    for(int i=9; i>0; --i){
-        if(!st.count('0'+i))chmin(mnum, i);
-    }
-    ll ans = m * mnum;
     cout << ans << endl;
     return 0;
 }
