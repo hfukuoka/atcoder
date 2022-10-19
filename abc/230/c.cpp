@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define ll long long
+#define rep(i, n) for (ll i = 0; i < n; ++i)
+#define rep_up(i, a, n) for (ll i = a; i < n; ++i)
+#define rep_down(i, a, n) for (ll i = a; i >= n; --i)
+#define P pair<ll, ll>
+
+#define all(v) v.begin(), v.end()
+#define fi first
+#define se second
+#define vvvll vector<vector<vector<ll>>>
+#define vvll vector<vector<ll>>
+#define vll vector<ll>
+#define pqll priority_queue<ll>
+#define pqllg priority_queue<ll, vector<ll>, greater<ll>>
+
+const ll INF = (1ll << 60);
+const ll mod = 1000000007;
+const double pi = 3.14159265358979323846;
+template <typename T>
+inline bool chmax(T &a, T b) {
+    if (a < b) {
+        a = b;
+        return 1;
+    }
+    return 0;
+}
+template <typename T>
+inline bool chmin(T &a, T b) {
+    if (a > b) {
+        a = b;
+        return 1;
+    }
+    return 0;
+}
+ll mypow(ll a, ll n) {
+    ll ret = 1;
+    rep(i, n) {
+        if (ret > (ll)(1e18 + 10) / a) return -1;
+        ret *= a;
+    }
+    return ret;
+}
+long long modpow(long long a, long long n, long long mod) {
+    long long res = 1;
+    while (n > 0) {
+        if (n & 1) res = res * a % mod;
+        a = a * a % mod;
+        n >>= 1;
+    }
+    return res;
+}
+
+int main(){
+    ll n, a, b, p, q, r, s;
+    cin >> n >> a >> b;
+    a--;
+    b--;
+    cin >> p >> q >> r >> s;
+    p--, q--, r--, s--;
+    vector<vector<char>> v(q-p+1, vector<char>(s-r+1, '.'));
+    rep(i, q-p+1){
+        rep(j, s-r+1){
+            ll x = i+p;
+            ll y = j+r;
+            if(x-y == a-b){
+                v[i][j] = '#';
+            }else if(x+y == a+b){
+                v[i][j] = '#';
+            }else{
+                v[i][j] = '.';
+            }
+        }
+    }
+    rep(i, q-p+1){
+        rep(j, s-r+1){
+            cout << v[i][j];
+        }
+        cout << endl;
+    }
+    return 0;
+}
