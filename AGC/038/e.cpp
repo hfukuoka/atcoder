@@ -55,6 +55,19 @@ long long modpow(long long a, long long n, long long mod) {
     return res;
 }
 
+long long modDiv(long long a, long long b, long long m) {
+	// Get the value of a/b
+	return (a * modpow(b, m - 2, m)) % m;
+}
+
+long long modSum1toX(long long X) {
+	// Calculate 1 + 2 + ... + X mod 1000000007
+	long long v1 = X % mod;
+	long long v2 = (X + 1) % mod;
+	long long v = v1 * v2 % mod;
+	return modDiv(v, 2, mod);
+}
+
 using Graph = vector<vector<long long>>;
 
 // 探索
@@ -89,29 +102,38 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
+/*  PrimeFact
+    init(N): 初期化。O(N log log N)
+    get(n): クエリ。素因数分解を求める。O(log n)
+ */
+template <typename T>
+struct PrimeFact {
+    vector<T> spf;
+    PrimeFact(T N) { init(N); }
+    void init(T N) { // 前処理。spf を求める
+        spf.assign(N + 1, 0);
+        for (T i = 0; i <= N; i++) spf[i] = i;
+        for (T i = 2; i * i <= N; i++) {
+            if (spf[i] == i) {
+                for (T j = i * i; j <= N; j += i) {
+                    if (spf[j] == j) {
+                        spf[j] = i;
+                    }
+                }
+            }
+        }
+    }
+    map<T, T> get(T n) { // nの素因数分解を求める
+        map<T, T> m;
+        while (n != 1) {
+            m[spf[n]]++;
+            n /= spf[n];
+        }
+        return m;
+    }
+};
+
 int main(){
-    int n, m;
-    cin >> n >> m;
-    vector<int> a(n);
-    for(auto &v : a) cin >> v;
-    vector<vector<int>> vals(m + 1);
-    for(int i = 0; i < n; i++) {
-        if(a[i] >= n) continue;
-        int l = (a[i] >= 0 ? 1 : (-a[i] + i) / (i + 1));
-        int r = min(m + 1, (n - a[i] + i) / (i + 1));
-        for(int j = l; j < r; j++) {
-            vals[j].push_back(a[i] + (i + 1) * j);
-        }
-    }
-    for(int i = 1; i <= m; i++) {
-        int sz = vals[i].size();
-        vector<bool> exi(sz + 1);
-        for(auto v : vals[i]) {
-            if(v < sz) exi[v] = true;
-        }
-        int res = 0;
-        while(exi[res]) res++;
-        cout << res << endl;
-    }
+
     return 0;
 }
