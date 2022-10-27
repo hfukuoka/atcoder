@@ -90,6 +90,24 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    ll n, m;
+    cin >> n >> m;
+    vll a(n);
+    vll s(n+1, 0);
+    rep(i, n){
+        cin >> a[i];
+        s[i+1] = s[i]+a[i];
+    }
+    ll ans = 0;
+    rep(i, m){
+        ans += (i+1)*a[i];
+    }
+    ll cur = ans;
+    rep_up(i, m, n){
+        cur -= s[i]-s[i-m];
+        cur += a[i]*m;
+        chmax(ans, cur);
+    }
+    cout << ans << endl;
     return 0;
 }

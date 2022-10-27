@@ -103,6 +103,32 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    ll h1, w1;
+    cin >> h1 >> w1;
+    vvll a(h1, vll(w1));
+    rep(i, h1)rep(j, w1)cin >> a[i][j];
+    ll h2, w2;
+    cin >> h2 >> w2;
+    vvll b(h2, vll(w2));
+    rep(i, h2)rep(j, w2)cin >> b[i][j];
+    rep(si, 1<<h1){
+        rep(sj, 1<<w1){
+            vll vi, vj;
+            rep(i, h1)if((1<<i) & si)vi.push_back(i); // 今回使う行番号
+            rep(j, w1)if((1<<j) & sj)vj.push_back(j); //　今回使う列番号
+            if(vi.size()!=h2 || vj.size()!=w2)continue; //削除後のAとBの形が違うならcontinue
+            bool ok = true;
+            rep(i, h2){
+                rep(j, w2){
+                    if(b[i][j]!=a[vi[i]][vj[j]])ok = false;
+                }
+            }
+            if(ok){
+                cout << "Yes" << endl;
+                return 0;
+            }
+        }
+    }
+    cout << "No" << endl;
     return 0;
 }

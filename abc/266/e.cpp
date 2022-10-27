@@ -90,6 +90,13 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    ll n;
+    cin >> n;
+    vector<double> f(n+1);
+    f[1] = 3.5;
+    rep_up(i, 2, n+1){
+        f[i] = (max(1.0, f[i-1])+max(2.0, f[i-1])+max(3.0, f[i-1])+max(4.0, f[i-1])+max(5.0, f[i-1])+max(6.0, f[i-1]))/6.0;
+    }
+    cout << fixed << setprecision(10) << f[n] << endl;
     return 0;
 }

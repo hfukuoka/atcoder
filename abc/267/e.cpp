@@ -90,6 +90,50 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    ll n, m;
+    cin >> n >> m;
+    vll a(n);
+    rep(i, n) cin >> a[i];
+    Graph G(n);
+    rep(i, m){
+        ll u, v;
+        cin >> u >> v;
+        u--, v--;
+        G[u].push_back(v);
+        G[v].push_back(u);
+    }
+    ll ng = -1, ok = 1e16;
+    while(ng+1<ok){
+        ll m = (ng+ok)/2;
+        vll c(n, 0);
+        queue<ll> q; // コストm以下
+        vector<bool> del(n); // qに入れたかどうか
+        rep(v, n){
+            for(auto nv : G[v]){
+                c[v] += a[nv];
+            }
+            if(c[v]<=m){
+                q.push(v);
+                del[v] = true;
+            }
+        }
+        ll cnt = 0;
+        while(!q.empty()){
+            cnt++;
+            ll v = q.front();
+            q.pop();
+            for(auto nv : G[v]){
+                if(del[nv])continue;
+                c[nv]-=a[v];
+                if(c[nv]<=m){
+                    q.push(nv);
+                    del[nv] = true;
+                }
+            }
+        }
+        if(cnt==n)ok = m;
+        else ng = m;
+    }
+    cout << ok << endl;
     return 0;
 }

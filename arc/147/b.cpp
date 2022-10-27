@@ -89,41 +89,24 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
+int p[410];
+
+vector<pair<char, ll>> ans;
+void f(char c, ll i){
+    ans.emplace_back(c, i+1);
+    swap(p[i], p[i+1+c-'A']);
+}
+
 int main(){
     ll n; cin >> n;
-    vector<ll> p(n);
-    rep(i, n){
-        cin >> p[i];
-        p[i]--;
+    rep(i, n)cin >> p[i];
+    ll l = 0;
+    for(ll i=0; i<n; ++i){
+        for(ll j=0; j<n-2; ++j) if(p[j]%2!=j%2 && p[j]%2!=p[j+2]%2) f('B', j);
     }
-    vector<pair<char, ll>> v;
-    rep(i, n){
-        ll r = n-1;
-        while(1){
-            if(i==p[r])break;
-            r--;
-        }
-        while(1){
-            if(r-i>=2){
-                v.push_back(make_pair('B', r-1));
-                ll t = p[r];
-                p[r] = p[r-2];
-                p[r-2] = t;
-                r-=2;
-            }else if(r-i==1){
-                v.push_back(make_pair('A', r));
-                ll t = p[r];
-                p[r] = p[r-1];
-                p[r-1] = t;
-                r--;
-            }else{
-                break;
-            }
-        }
-    }
-    cout << v.size() << endl;
-    for(auto p : v){
-        cout << p.first << " " << p.second << endl;
-    }
+    for(ll i=0; i<n-1; i++) if(p[i]%2==i%2 && p[i+1]%2==(i+1)%2) f('A', i);
+    for(ll i=0; i<n; ++i) for(ll j=0; j<n-2; ++j) if(p[j]>p[j+2]) f('B', j);
+    cout << ans.size() << endl;
+    for(auto x:ans) cout << x.first << " " << x.second << endl;
     return 0;
 }

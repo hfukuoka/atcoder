@@ -103,6 +103,34 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    ll n, x;
+    cin >> n >> x;
+    vll a(n);
+    rep(i, n)cin >> a[i];
+    ll l = -1, r = 1e15;
+    while(l+1<r){
+        ll m = (l+r)/2;
+        vll b = a;
+        ll cnt = 0;
+        bool f = true;
+        rep(i, n-1){
+            if(b[i]+b[i+1]<=x)continue;
+            if(b[i]>x){
+                cnt += b[i+1]+ b[i] - x;
+                b[i+1] = 0;
+                b[i] = x;
+            }else{
+                cnt += max(b[i+1]-(x-b[i]), 0LL);
+                b[i+1] = min(b[i+1], x-b[i]);
+            }
+            if(cnt > m){
+                f = false;
+                break;
+            }
+        }
+        if(f) r = m;
+        else l = m;
+    }
+    cout << r << endl;
     return 0;
 }

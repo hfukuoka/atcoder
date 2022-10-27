@@ -103,6 +103,37 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    ll n, m, e;
+    cin >> n >> m >> e;
+    vector<P> uv(e);
+    rep(i, e){
+        ll u, v;
+        cin >> u >> v;
+        u--, v--;
+        uv[i] = make_pair(min(u, n), min(v, n));
+    }
+    vll edge(e, true);
+    ll q;
+    cin >> q;
+    vll x(q);
+    rep(i, q){
+        cin >> x[i];
+        x[i]--;
+        edge[x[i]] = false;
+    }
+    dsu uf(n+1);
+    rep(i, e){
+        auto[u, v] = uv[i];
+        if(edge[i]) uf.merge(u, v);
+    }
+    vll ans(q);
+    rep_down(i, q-1, 0){
+        ans[i] = uf.size(n)-1;
+        auto[u, v] = uv[x[i]];
+        uf.merge(u, v);
+    }
+    for(auto a:ans){
+        cout << a << endl;
+    }
     return 0;
 }

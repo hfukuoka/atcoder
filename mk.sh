@@ -12,7 +12,7 @@ make_files(){
         touch input.txt
         touch run.sh
         chmod +x run.sh
-        echo "g++ \$1.cpp -o \$1 -std=c++14 -I /usr/local/include" >> run.sh
+        echo "g++ \$1.cpp -o \$1 -std=c++17 -I /usr/local/include" >> run.sh
         echo "cat input.txt | ./\$1" >> run.sh
         if [[ $1 = "abc"  ]] ; then
             L=(a b c d e f)

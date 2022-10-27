@@ -134,6 +134,21 @@ struct PrimeFact {
 };
 
 int main(){
-
+    ll n, q;
+    string s;
+    cin >> n >> q >> s;
+    ll l = 0;
+    while(q>0){
+        q--;
+        ll t, x;
+        cin >> t >> x;
+        if(t==1){
+            l -= x;
+            l += n;
+            l %= n;
+        }else{
+            cout << s[(l+x-1)%n] << endl;
+        }
+    }
     return 0;
 }
