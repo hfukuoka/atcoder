@@ -55,39 +55,53 @@ long long modpow(long long a, long long n, long long mod) {
 
 using Graph = vector<vector<long long>>;
 
-// 探索
-vector<bool> seen, finished;
-
-// サイクル復元のための情報
-int pos = -1; // サイクル中に含まれる頂点 pos
-stack<int> hist; // 訪問履歴
+ll l[200010] = {};
+ll r[200010] = {};
+int cur=1;
 
 void dfs(const Graph &G, int v, int p) {
-    seen[v] = true;
-    hist.push(v);
-    for (auto nv : G[v]) {
-        if (nv == p) continue; // 逆流を禁止する
-
-        // 完全終了した頂点はスルー
-        if (finished[nv]) continue;
-
-        // サイクルを検出
-        if (seen[nv] && !finished[nv]) {
-            pos = nv;
-            return;
-        }
-
-        // 再帰的に探索
-        dfs(G, nv, v);
-
-        // サイクル検出したならば真っ直ぐに抜けていく
-        if (pos != -1) return;
+    if(G[v].size()==1 && (v!=0)){
+        l[v] = cur;
+        r[v] = cur;
+        cur++;
+        return;
     }
-    hist.pop();
-    finished[v] = true;
+    ll le=INF, ri=0;
+    for (auto nv : G[v]) {
+        if (nv == p) continue;
+        dfs(G, nv, v);
+        chmax(ri, r[nv]);
+        chmin(le, l[nv]);
+    }
+    l[v] = le;
+    r[v] = ri;
+    // cout << "h" << endl;
+    return;
 }
 
 int main(){
-
+    ll n;
+    cin >> n;
+    Graph G(n);
+    rep(i, n-1){
+        ll u, v;
+        cin >> u >> v;
+        u--;
+        v--;
+        G[u].push_back(v);
+        G[v].push_back(u);
+    }
+    // rep(i, n){
+    //     cout << i << endl;
+    //     for(auto v : G[i]){
+    //         cout << v <<  " ";
+    //     }
+    //     cout << endl;
+    // }
+    // cout << " h" << endl;
+    dfs(G, 0, -1);
+    rep(i, n){
+        cout << l[i] << " " << r[i] << endl;
+    }
     return 0;
 }

@@ -90,6 +90,21 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    ll n;
+    cin >> n;
+    ll id = 0;
+    ll nn = n;
+    vll b;
+    while(nn>0){
+        if(nn%2)b.push_back(id);
+        id++;
+        nn /=2;
+    }
+    ll m = b.size();
+    rep(s, 1LL<<m){
+        ll x = 0;
+        rep(i, m)if((s>>i)&1) x |= 1LL<<b[i];
+        cout << x << endl;
+    }
     return 0;
 }

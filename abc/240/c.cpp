@@ -88,6 +88,18 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    ll n, x;
+    cin >> n >> x;
+    vvll dp(n+1, vll(x+1));
+    dp[0][0] = 1;
+    rep(i, n){
+        ll a, b;
+        cin >> a >> b;
+        rep(j, x){
+            if(j+a<=x) dp[i+1][j+a] |= dp[i][j];
+            if(j+b<=x) dp[i+1][j+b] |= dp[i][j];
+        }
+    }
+    cout << (dp[n][x] ? "Yes" : "No") << endl;
     return 0;
 }

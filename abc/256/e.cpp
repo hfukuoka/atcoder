@@ -134,6 +134,42 @@ struct PrimeFact {
 };
 
 int main(){
-
+    ll n;
+    cin >> n;
+    vll x(n), c(n);
+    rep(i, n){
+        cin >> x[i];
+        x[i]--;
+    }
+    rep(i, n)cin >> c[i];
+    vector<bool> seen(n, false);
+    ll ans = 0;
+    rep(s, n){
+        if(seen[s])continue;
+        ll v = s;
+        set<ll> set;
+        stack<ll> stack;
+        while(1){
+            stack.push(v);
+            set.insert(v);
+            seen[v] = true;
+            ll nv = x[v];
+            if(seen[nv]){
+                if(set.count(nv)){
+                    ll cur = INF;
+                    while(1){
+                        ll a = stack.top();
+                        stack.pop();
+                        chmin(cur, c[a]);
+                        if(a==nv)break;
+                    }
+                    ans += cur;
+                    break;
+                }else break;
+            }
+            v = nv;
+        }
+    }
+    cout << ans << endl;
     return 0;
 }

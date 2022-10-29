@@ -2,6 +2,7 @@
 #include <atcoder/all>
 using namespace std;
 using namespace atcoder;
+using mint = modint998244353;
 
 #define ll long long
 #define rep(i, n) for (ll i = 0; i < n; ++i)
@@ -134,6 +135,30 @@ struct PrimeFact {
 };
 
 int main(){
-
+    ll n, m, k;
+    cin >> n >> m >> k;
+    vector dp(n+1, vector<mint>(m+1, 0));
+    rep_up(i,1, m+1){
+        dp[1][i] = 1;
+    }
+    rep_up(i, 2, n+1){
+        vector<mint> s(m+1, 0);
+        rep(j, m){
+            s[j+1] = s[j]+dp[i-1][j+1];
+        }
+        rep_up(j,1, m+1){
+            if(k==0){
+                dp[i][j] += s[m];
+                continue;
+            }
+            if(j-k>0)dp[i][j] += s[j-k];
+            if(j+k<=m)dp[i][j] += s[m]-s[j+k-1];
+        }
+    }
+    mint ans = 0;
+    rep(i, m){
+        ans += dp[n][i+1];
+    }
+    cout << ans.val() << endl;
     return 0;
 }

@@ -88,6 +88,31 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    ll n, k;
+    cin >> n >> k;
+    vll a(n);
+    rep(i, n) cin >> a[i];
+    ll x = 0;
+    vector<ll> seen(n, 0);
+    ll id = 1;
+    vll s(n+1, 0);
+    while(k){
+        if(seen[x%n]){
+            ll m = id-seen[x%n];
+            x += (s[id-1]-s[seen[x%n]-1])*(k/m);
+            k %= m;
+            while(k){
+                x += a[x%n];
+                k--;
+            }
+            break;
+        }
+        seen[x%n] = id;
+        x += a[x%n];
+        k--;
+        s[id] = s[id-1]+a[x%n];
+        id++;
+    }
+    cout << x << endl;
     return 0;
 }

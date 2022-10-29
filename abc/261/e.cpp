@@ -17,6 +17,7 @@ using namespace atcoder;
 #define vll vector<ll>
 #define pqll priority_queue<ll>
 #define pqllg priority_queue<ll, vector<ll>, greater<ll>>
+#define bit(x,i)(((x)>>(i))&1)
 
 const ll INF = (1ll << 60);
 const ll mod = 1000000007;
@@ -103,6 +104,25 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    int n, c;
+    cin >> n >> c;
+    vector<int> t(n), a(n);
+    rep(i, n) cin >> t[i] >> a[i];
+    vector<int> ans(n);
+    rep(k, 30){
+        array<int, 2>func={0, 1};
+        int crr=bit(c, k);
+        rep(i, n){
+            array<int, 2> f;
+            int x = bit(a[i], k);
+            if(t[i]==1)f={0&x, 1&x};
+            if(t[i]==2)f={0|x, 1|x};
+            if(t[i]==3)f={0^x, 1^x};
+            func = {f[func[0]], f[func[1]]};
+            crr = func[crr];
+            ans[i]|=crr<<k;
+        }
+    }
+    rep(i, n)cout << ans[i] << endl;
     return 0;
 }

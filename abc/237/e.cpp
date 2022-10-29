@@ -53,41 +53,57 @@ long long modpow(long long a, long long n, long long mod) {
     return res;
 }
 
-using Graph = vector<vector<long long>>;
-
-// 探索
-vector<bool> seen, finished;
-
-// サイクル復元のための情報
-int pos = -1; // サイクル中に含まれる頂点 pos
-stack<int> hist; // 訪問履歴
-
-void dfs(const Graph &G, int v, int p) {
-    seen[v] = true;
-    hist.push(v);
-    for (auto nv : G[v]) {
-        if (nv == p) continue; // 逆流を禁止する
-
-        // 完全終了した頂点はスルー
-        if (finished[nv]) continue;
-
-        // サイクルを検出
-        if (seen[nv] && !finished[nv]) {
-            pos = nv;
-            return;
+struct Edge {
+    long long to;
+    long long cost;
+};
+using Graph = vector<vector<Edge>>;
+/* dijkstra(G,s,dis)
+    入力：グラフ G, 開始点 s, 距離を格納する dis
+    計算量：O(|E|log|V|)
+    副作用：dis が書き換えられる
+*/
+void dijkstra(const Graph &G, int s, vector<long long> &dis) {
+    int N = G.size();
+    dis.resize(N, INF);
+    priority_queue<P, vector<P>, greater<P>> pq;  // 「仮の最短距離, 頂点」が小さい順に並ぶ
+    dis[s] = 0;
+    pq.emplace(dis[s], s);
+    while (!pq.empty()) {
+        P p = pq.top();
+        pq.pop();
+        int v = p.second;
+        if (dis[v] < p.first) {  // 最短距離で無ければ無視
+            continue;
         }
-
-        // 再帰的に探索
-        dfs(G, nv, v);
-
-        // サイクル検出したならば真っ直ぐに抜けていく
-        if (pos != -1) return;
+        for (auto &e : G[v]) {
+            if (dis[e.to] > dis[v] + e.cost) {  // 最短距離候補なら priority_queue に追加
+                dis[e.to] = dis[v] + e.cost;
+                pq.emplace(dis[e.to], e.to);
+            }
+        }
     }
-    hist.pop();
-    finished[v] = true;
 }
 
 int main(){
-
+    ll n,m;
+    cin >> n >> m;
+    vll h(n);
+    rep(i, n)cin >> h[i];
+    Graph G(n);
+    rep(i, m){
+        ll u, v;
+        cin >> u >> v;
+        u--, v--;
+        G[u].push_back({v, max(h[v]-h[u], 0LL)});
+        G[v].push_back({u, max(h[u]-h[v], 0LL)});
+    }
+    vll dis(n, INF);
+    dijkstra(G, 0, dis);
+    ll ans = 0;
+    rep(i, n){
+        chmax(ans, h[0]-h[i]-dis[i]);
+    }
+    cout << ans << endl;
     return 0;
 }

@@ -19,7 +19,7 @@ using namespace atcoder;
 #define pqllg priority_queue<ll, vector<ll>, greater<ll>>
 
 const ll INF = (1ll << 60);
-const ll mod = 1000000007;
+const ll mod = 998244353;
 const double pi = 3.14159265358979323846;
 template <typename T>
 inline bool chmax(T &a, T b) {
@@ -102,7 +102,40 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+using mint = modint998244353;
 
+int main(){
+    int n, m;
+    cin >> n >> m;
+    vector<pair<int,int>> dxy;
+    rep(i, 3){
+        int a, b;
+        cin >> a >> b;
+        dxy.push_back({a, b});
+    }
+    set<pair<int,int>> s;
+    rep(i, m){
+        int x, y;
+        cin >> x >> y;
+        s.insert({x, y});
+    }
+    vector<map<pair<int,int>,mint>> dp(n+1);
+    dp[0][{0, 0}] = 1;
+    rep(i, n){
+        for(auto[xy, val]: dp[i]){
+            auto [x, y] = xy;
+            for(auto[dx,dy]:dxy){
+                P p = {x+dx,y+dy};
+                if(!s.count(p)){
+                    dp[i+1][p] += val;
+                }
+            }
+        }
+    }
+    mint ans = 0;
+    for(auto [_, val] : dp[n]){
+        ans += val;
+    }
+    cout << ans.val() << endl;
     return 0;
 }

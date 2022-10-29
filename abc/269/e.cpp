@@ -89,7 +89,28 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+ll send(ll a, ll b, ll c, ll d){
+    cout << "? " << a << " " << b << " " << c << " " << d << endl;
+    ll t;
+    cin >> t;
+    return t;
+}
 
+int main(){
+    ll n;
+    cin >> n;
+    ll u = 1, d = n+1;
+    while(u+1<d){
+        ll m = (u+d)/2;
+        ll t = send(u, m-1, 1, n);
+        (t == m-u ? u : d) = m;
+    }
+    ll l = 1, r = n+1;
+    while(l+1<r){
+        ll m = (l+r)/2;
+        ll t = send(1, n, l, m-1);
+        (t==m-l ? l : r) = m;
+    }
+    cout << "! " << u << " " << l << endl;
     return 0;
 }

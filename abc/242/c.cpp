@@ -1,4 +1,6 @@
 #include <bits/stdc++.h>
+#include<atcoder/all>
+using namespace atcoder;
 using namespace std;
 
 #define ll long long
@@ -87,7 +89,23 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+using mint = modint998244353;
 
+mint dp[1000002][10] = {};
+
+int main(){
+    int n;
+    cin >> n;
+    for(int i=1; i<=9; ++i) dp[1][i] = 1;
+    for(int i=1; i<n; ++i){
+        for(int j=1; j<=9; ++j){
+            if(j+1<=9)dp[i+1][j+1] += dp[i][j];
+            dp[i+1][j] += dp[i][j];
+            if(j-1>=1)dp[i+1][j-1] += dp[i][j];
+        }
+    }
+    mint ans = 0;
+    for(int i=1; i<=9;++i)ans += dp[n][i];
+    cout << ans.val() << endl;
     return 0;
 }

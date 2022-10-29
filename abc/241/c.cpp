@@ -87,7 +87,35 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+int di[4] = {1, 1, 0, 1};
+int dj[4] = {0, 1, 1, -1};
 
+int main(){
+    ll n;
+    cin >> n;
+    vector<string> s(n);
+    rep(i, n)cin >> s[i];
+    rep(i, n){
+        rep(j, n){
+            rep(v, 4){
+                ll cnt = 0;
+                bool ok = true;
+                rep(k, 6){
+                    ll ni = i+di[v]*k;
+                    ll nj = j+dj[v]*k;
+                    if(ni<0 || ni>=n || nj<0 || nj>=n){
+                        ok = false;
+                        break;
+                    }
+                    if(s[ni][nj]=='.')cnt++;
+                }
+                if(ok && cnt<=2){
+                    cout << "Yes" << endl;
+                    return 0;
+                }
+            }
+        }
+    }
+    cout << "No" << endl;
     return 0;
 }

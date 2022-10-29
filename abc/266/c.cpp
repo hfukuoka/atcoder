@@ -90,6 +90,23 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    vector<P> v(4);
+    rep(i, 4){
+        ll x, y;
+        cin >> x >> y;
+        v[i]=make_pair(x, y);
+    }
+    rep(i, 4){
+        auto[x1, y1] = v[i];
+        auto [x2, y2] = v[(i+1)%4];
+        auto [x3, y3] = v[(i+2)%4];
+        ll a1 = x2-x1, b1=y2-y1;
+        ll a2 = x3-x2, b2=y3-y2;
+        if(a1*b2-b1*a2<0){
+            cout << "No" << endl;
+            return 0;
+        }
+    }
+    cout << "Yes" << endl;
     return 0;
 }
