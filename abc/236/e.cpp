@@ -87,7 +87,64 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+double maxSum(vector<double> b){
+    ll n = b.size();
+    vector dp(n+1, vector<double>(2, -1e18));
+    dp[0][1] = 0;
+    rep(i, n){
+        chmax(dp[i+1][1], dp[i][0]+b[i]);
+        chmax(dp[i+1][1], dp[i][1]+b[i]);
+        chmax(dp[i+1][0], dp[i][1]);
+    }
+    return max(dp[n][0], dp[n][1]);
+}
 
+double solveAve(vll a){
+    ll n = a.size();
+    double ac = 0, wa = 1e9;
+    rep(ti, 50){
+        double wj = (ac+wa)/2;
+        vector<double> b(n);
+        rep(i, n) b[i] = (double)a[i]-wj;
+        if(maxSum(b) >= 0) ac = wj;
+        else wa = wj;
+    }
+    return ac;
+}
+
+bool canMedOne(vll b){
+    ll n = b.size();
+    ll n0=0, n1=0, m=0;
+    rep(i, n){
+        if(b[i]==1){
+            n1++;
+            n0 += m/2;
+            m=0;
+        }else ++m;
+    }
+    n0 += m/2;
+    return n0<=n1-1;
+}
+
+long long solveMed(vll a){
+    ll n = a.size();
+    ll ac = 1, wa = 1e9+1;
+    while(ac+1<wa){
+        ll wj = (ac+wa)/2;
+        vll b(n);
+        rep(i, n)b[i] = a[i]>=wj;
+        if(canMedOne(b)) ac = wj;
+        else wa = wj;
+    }
+    return ac;
+}
+
+int main(){
+    ll n;
+    cin >> n;
+    vll a(n);
+    rep(i, n) cin >> a[i];
+    printf("%.10f\n", solveAve(a));
+    cout << solveMed(a) << endl;
     return 0;
 }
