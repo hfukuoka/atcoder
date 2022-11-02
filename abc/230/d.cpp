@@ -54,6 +54,24 @@ long long modpow(long long a, long long n, long long mod) {
 }
 
 int main(){
-
+    ll n, d;
+    cin >> n >> d;
+    vector<P> v(n);
+    rep(i, n){
+        ll l, r;
+        cin >> l >> r;
+        v[i] = {r, l};
+    }
+    sort(all(v));
+    ll crr = 0;
+    ll ans = 0;
+    rep(i, n){
+        auto [r, l] = v[i];
+        if(crr<l){
+            crr = r+d-1;
+            ans++;
+        }
+    }
+    cout << ans << endl;
     return 0;
 }

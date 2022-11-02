@@ -88,6 +88,39 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    ll n, m;
+    cin >> n >> m;
+    vll a(n), b(n), c(m), d(m);
+    rep(i, n)cin >> a[i];
+    rep(i, n)cin >> b[i];
+    rep(i, m)cin >> c[i];
+    rep(i, m)cin >> d[i];
+    vector<pair<P, ll>> v(n+m);
+    rep(i, n){
+        v[i] = {{a[i], b[i]}, 0};
+    }
+    rep(i, m){
+        v[i+n] = {{c[i], d[i]}, 1};
+    }
+    sort(all(v));
+    // rep(i, n+m){
+    //     cout << v[i].first.first << " " << v[i].first.second <<endl;
+    // }
+    multiset<ll> st;
+    rep_down(i, n+m-1, 0){
+        auto [p, t] = v[i];
+        auto [x, y] = p;
+        if(t==0){
+            auto it = st.lower_bound(y);
+            if(it==st.end()){
+                cout << "No" << endl;
+                return 0;
+            }
+            st.erase(it);
+        }else{
+            st.insert(y);
+        }
+    }
+    cout << "Yes" << endl;
     return 0;
 }

@@ -134,6 +134,23 @@ struct PrimeFact {
 };
 
 int main(){
-
+    ll n;
+    cin >> n;
+    vll c(9);
+    rep(i, 9)cin >> c[i];
+    ll mn = *min_element(all(c));
+    ll len = n/mn;
+    string ans = "";
+    for(ll i=0; i<len; ++i){
+        for(ll j=9; j>0; --j){
+            // cout << ans << endl;
+            if(mn*(len-i-1)+c[j-1]<=n){
+                n -= c[j-1];
+                ans+=('0'+j);
+                break;
+            }
+        }
+    }
+    cout << ans << endl;
     return 0;
 }

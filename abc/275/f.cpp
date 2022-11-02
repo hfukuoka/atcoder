@@ -135,6 +135,28 @@ struct PrimeFact {
 };
 
 int main(){
-
+    ll n, m;
+    cin >> n >> m;
+    vll a(n);
+    rep(i, n)cin >> a[i];
+    vvvll dp(n+1, vvll(m+1, vll(2, INF)));
+    dp[0][0][1] = 0;
+    rep(i, n){
+        rep(j, m+1){
+            rep(k, 2){
+                if(j+a[i]<=m)chmin(dp[i+1][j+a[i]][1], dp[i][j][0]);
+                if(j+a[i]<=m)chmin(dp[i+1][j+a[i]][1], dp[i][j][1]);
+                chmin(dp[i+1][j][0], dp[i][j][0]);
+                chmin(dp[i+1][j][0], dp[i][j][1]+1);
+                cout << dp[i][j][k] << " ";
+            }
+            cout << j << endl;
+        }
+    }
+    rep_up(x, 1, m+1){
+        ll ans = min(dp[n][x][0], dp[n][x][1]);
+        if(ans==INF) ans = -1;
+        cout << ans << endl;
+    }
     return 0;
 }

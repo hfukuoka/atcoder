@@ -134,6 +134,39 @@ struct PrimeFact {
 };
 
 int main(){
-
+    ll n, q;
+    cin >> n;
+    vll a(n), b(n);
+    rep(i, n) cin >> a[i];
+    rep(i, n) cin >> b[i];
+    vll ca(n), cb(n), mx(n);
+    map<ll, ll> mp;
+    rep(i, n){
+        if(!mp.count(a[i])){
+            mp[a[i]]=mp.size()+1;
+        }
+        ca[i] = mp.size();
+    }
+    set<ll> s;
+    ll m = 0;
+    rep(i, n){
+        s.insert(b[i]);
+        ll x = mp[b[i]];
+        if(x==0) x=INF;
+        chmax(m, x);
+        mx[i] = m;
+        cb[i] = s.size();
+    }
+    cin >> q;
+    rep(qi, q){
+        ll x, y;
+        cin >> x >> y;
+        --x, --y;
+        if(ca[x]==cb[y] && mx[y]==cb[y]){
+            cout << "Yes" << endl;
+        }else{
+            cout << "No" << endl;
+        }
+    }
     return 0;
 }

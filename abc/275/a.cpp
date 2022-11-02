@@ -135,6 +135,15 @@ struct PrimeFact {
 };
 
 int main(){
-
+    ll n;
+    cin >> n;
+    vll h(n);
+    ll ans = 0;
+    ll res = 0;
+    rep(i, n){
+        cin >> h[i];
+        if(chmax(ans, h[i])) res = i+1;
+    }
+    cout << res << endl;
     return 0;
 }

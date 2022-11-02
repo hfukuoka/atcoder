@@ -20,7 +20,10 @@
     "string": "cpp",
     "system_error": "cpp",
     "vector": "cpp",
-    "array": "cpp"
+    "array": "cpp",
+    "limits": "cpp",
+    "valarray": "cpp"
   },
-  "C_Cpp.errorSquiggles": "Disabled"
+  "C_Cpp.errorSquiggles": "Disabled",
+  "editor.tabSize": 4
 }

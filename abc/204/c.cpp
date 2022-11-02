@@ -134,6 +134,34 @@ struct PrimeFact {
 };
 
 int main(){
-
+    ll n, m;
+    cin >> n >> m;
+    Graph G(n);
+    rep(i, m){
+        ll a, b;
+        cin >> a >> b;
+        a--, b--;
+        G[a].push_back(b);
+    }
+    ll ans = 0;
+    rep(i, n){
+        queue<ll> q;
+        vector<bool> seen(n, false);
+        seen[i]=true;
+        q.push(i);
+        while(!q.empty()){
+            ll v = q.front();
+            q.pop();
+            for(auto nv:G[v]){
+                if(seen[nv])continue;
+                seen[nv] = true;
+                q.push(nv);
+            }
+        }
+        rep(j, n){
+            if(seen[j])ans++;
+        }
+    }
+    cout << ans << endl;
     return 0;
 }

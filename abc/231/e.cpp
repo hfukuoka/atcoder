@@ -53,7 +53,29 @@ long long modpow(long long a, long long n, long long mod) {
     return res;
 }
 
-int main(){
 
-    return 0;
+int main(){
+  ll n, x;
+	cin >> n >> x;
+  vll a(n);
+  rep(i, n)cin >> a[i];
+	vll dp(2, INF);
+	dp[0] = 0;
+	rep(i, n-1){
+		ll d = a[i+1]/a[i];
+		ll r = x%d;
+		vll p(2, INF);
+		swap(dp, p);
+		rep(c, 2){
+			rep(nc, 2){
+				ll nr = c-nc*d+r;
+				chmin(dp[nc], p[c]+abs(nr));
+			}
+		}
+		x /= d;
+	}
+	ll ans = INF;
+	rep(c, 2)chmin(ans, dp[c]+abs(x+c));
+	cout << ans << endl;
+  return 0;
 }

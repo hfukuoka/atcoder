@@ -134,7 +134,19 @@ struct PrimeFact {
     }
 };
 
-int main(){
+map<ll, ll> m;
 
+ll f(ll k){
+    if(m.count(k))return m[k];
+    ll res = f(k/2)+f(k/3);
+    m[k] = res;
+    return res;
+}
+
+int main(){
+    ll n;
+    cin >> n;
+    m[0]=1;
+    cout << f(n) << endl;
     return 0;
 }

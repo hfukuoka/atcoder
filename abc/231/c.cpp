@@ -54,6 +54,17 @@ long long modpow(long long a, long long n, long long mod) {
 }
 
 int main(){
-
-    return 0;
+  ll n, q;
+  cin >> n >> q;
+	vll a(n);
+	rep(i, n)cin >> a[i];
+	sort(all(a));
+	while(q){
+		ll x;
+		cin >> x;
+		ll ans = a.end()-lower_bound(all(a), x);
+		cout << ans << endl;
+		q--;
+	}
+  return 0;
 }

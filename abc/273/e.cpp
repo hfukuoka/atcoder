@@ -102,7 +102,45 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+struct Node{
+    ll val, p;
+    vll cs; // 子供のノードのid
+    Node(int v, int _p){val = v, p = _p;};
+};
 
+int main(){
+    ll q; 
+    cin >> q;
+    map<ll, ll> mp;
+    vector<Node> vec;
+    ll v=0;
+    vec.push_back(Node(-1, 0));
+    while(q){
+        q--;
+        string s;
+        cin >> s;
+        if(s=="ADD"){
+            ll x;
+            cin >> x;
+            vec.push_back(Node(x, v));
+            vec[v].cs.push_back((ll)vec.size()-1);
+            v = (ll)vec.size()-1;
+        }
+        if(s=="DELETE"){
+            v = vec[v].p;        
+        }
+        if(s=="SAVE"){
+            ll y;
+            cin >> y;
+            mp[y] = v;
+        }
+        if(s=="LOAD"){
+            ll z;
+            cin >> z;
+            v = mp[z];
+        }
+        cout << vec[v].val << " ";
+    }
+    cout << endl;
     return 0;
 }

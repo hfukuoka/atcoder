@@ -54,6 +54,24 @@ long long modpow(long long a, long long n, long long mod) {
 }
 
 int main(){
-
+    ll n;
+    cin >> n;
+    ll m = n;
+    ll ans = 0;
+    if(n==1){
+        cout << 1 << endl;
+        return 0;
+    }
+    for(ll i=1; i<=n; ++i){
+        m = n/i;
+        if(i*i>n)break;
+        ans += n/i;
+    }
+    for(ll j=m; j>=1; j--){
+        ll r = n/j;
+        ll l = (n%(j+1)==0 ? n/(j+1)+1 : (n+j)/(j+1));
+        ans += j*(r-l+1);
+    }
+    cout << ans << endl;
     return 0;
 }

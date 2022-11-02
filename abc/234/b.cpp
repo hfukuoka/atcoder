@@ -79,7 +79,7 @@ void dfs(const Graph &G, int v, int p) {
 
         // 再帰的に探索
         dfs(G, nv, v);
-
+        
         // サイクル検出したならば真っ直ぐに抜けていく
         if (pos != -1) return;
     }

@@ -134,7 +134,33 @@ struct PrimeFact {
     }
 };
 
-int main(){
+using mint = modint998244353;
 
+int main(){
+    ll n, m, k;
+    cin >> n >> m >> k;
+    vector dp(k+1, vector<mint>(n+1, 0));
+    dp[0][0] = 1;
+    rep(i, k){
+        rep(j, n){ // 0~n-1が出発
+            rep_up(a, 1, m+1){ // ルーレットでaがでる1<=a<=m
+                if(j+a<=n)dp[i+1][j+a] += dp[i][j];
+                else{
+                    dp[i+1][n-(j+a-n)] += dp[i][j];
+                }
+            }
+        }
+    }
+    mint power[k+1] = {};
+    power[0] = 1;
+    rep_up(i, 0, k){
+        power[i+1] = power[i]*m;
+    }
+    mint res = 0;
+    rep(i, k+1){
+        res += dp[i][n]*power[k-i];
+    }
+    mint ans = res / power[k];
+    cout << ans.val() << endl;
     return 0;
 }

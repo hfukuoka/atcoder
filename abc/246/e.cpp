@@ -87,7 +87,52 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+int dx[4] = {1, 1, -1, -1};
+int dy[4] = {1, -1, 1, -1};
 
+int main(){
+    ll n;
+    cin >> n;
+    ll ax, ay, bx, by;
+    cin >> ax >> ay >> bx >> by;
+    ax--, ay--, bx--, by--;
+    vector<string> s(n);
+    rep(i, n)cin >> s[i];
+    vvvll dis(n, vvll(n, vll(4, INF)));
+    deque<pair<P, ll>> dq;
+    rep(v, 4){
+        ll cx = ax+dx[v];
+        ll cy = ay+dy[v];
+        if(cx<0 || cx>=n || cy<0 || cy>=n)continue;
+        if(s[cx][cy]=='#')continue;
+        dis[cx][cy][v]=1;
+        dq.push_back({{cx, cy}, v});
+    }
+    vector seen(n, vector<vector<bool>>(n, vector<bool>(4, false)));
+    while(!dq.empty()){
+        auto [p, pv] = dq.front();
+        auto [x, y] = p;
+        if(x==bx && y==by){
+            cout << dis[x][y][pv] << endl;
+            return 0;
+        }
+        dq.pop_front();
+        if(seen[x][y][pv])continue;
+        seen[x][y][pv] = true;
+        rep(v, 4){
+            ll nx = x + dx[v];
+            ll ny = y + dy[v];
+            if(nx<0 || nx>=n || ny<0 || ny>=n)continue;
+            if(s[nx][ny]=='#')continue;
+            if(pv==v && dis[nx][ny][v]>dis[x][y][pv]){
+                dis[nx][ny][v] = dis[x][y][pv];
+                dq.push_front({{nx, ny}, v});
+            }else if(pv!=v && dis[nx][ny][v]>dis[x][y][pv]+1){
+                dis[nx][ny][v] = dis[x][y][pv]+1;
+                dq.push_back({{nx, ny}, v});
+            }
+        }
+    }
+    cout << -1 << endl;
     return 0;
 }

@@ -88,6 +88,25 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    string x;
+    cin >> x;
+    ll n = x.size();
+    vll s(n+1, 0);
+    rep_down(i, n-1, 0){
+        s[i] = s[i+1]+(x[n-i-1]-'0');
+    }
+    string ans = "";
+    rep(i, n){
+        if(i==n-1){
+            string sentou = to_string(s[n-1]);
+            reverse(all(sentou));
+            ans+=sentou;
+            break;
+        }
+        ans.push_back('0'+(s[i]%10));
+        s[i+1] += s[i]/10;
+    }
+    reverse(all(ans));
+    cout << ans << endl;
     return 0;
 }

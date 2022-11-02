@@ -133,8 +133,13 @@ struct PrimeFact {
         return m;
     }
 };
+using mint = modint998244353;
 
 int main(){
-
+    vll v(6);
+    rep(i, 6) cin >> v[i];
+    mint a = v[0], b=v[1], c=v[2], d=v[3], e=v[4], f=v[5];
+    mint ans = a*b*c-d*e*f;
+    cout << ans.val() << endl;
     return 0;
 }

@@ -134,7 +134,46 @@ struct PrimeFact {
     }
 };
 
-int main(){
+int di[4] = {0, 1, 0, 1};
+int dj[4] = {0, 0, 1, 1};
 
+pair<vll, vll> f(ll i, ll j, ll si, ll sj){
+    vll vi(4), vj(4);
+    vi[0] = i, vj[0] = j;
+    vi[1] = si, vj[1] = sj;
+    vi[2] = vj[1]-vj[0]+vi[0];
+    vj[2] = -vi[1]+vi[0]+vj[0];
+    vi[3] = vj[0] -vj[2]+vi[2];
+    vj[3] = -vi[0] +vi[2]+vj[2];
+    return {vi, vj};
+}
+
+int main(){
+    vector<string> s(9);
+    rep(i, 9)cin >> s[i];
+    ll ans = 0;
+    rep(i, 9){
+        rep(j, 9){
+            rep_down(si, i-1, 0){
+                rep_up(sj, j, 9){
+                    if(si==i && sj==j)continue;
+                    auto [vi,vj] = f(i, j, si, sj);
+                    bool f = true;
+                    rep(a, 4){
+                        if(vi[a]<0 || vi[a]>=9 || vj[a]<0 || vj[a]>=9){
+                            f = false;
+                            break;
+                        }
+                        if(s[vi[a]][vj[a]]=='.'){
+                            f=false;
+                            break;
+                        }
+                    }
+                    if(f)ans++;
+                }
+            }
+        }
+    }
+    cout << ans << endl;
     return 0;
 }

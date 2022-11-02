@@ -134,6 +134,23 @@ struct PrimeFact {
 };
 
 int main(){
-
+    ll n, m;
+    cin >> n >> m;
+    vll s(n-1), x(m);
+    rep(i, n-1)cin >> s[i];
+    rep(i, m)cin >> x[i];
+    map<ll, ll> cnt;
+    ll a=0, c=1;
+    rep(i, n){
+        rep(j, m){
+            cnt[(x[j]-a)*c]++;
+        }
+        if(i==n-1)break;
+        a = s[i]-a;
+        c *= -1;
+    }
+    ll ans = 0;
+    for(auto [x, c]: cnt)chmax(ans, c);
+    cout << ans << endl;
     return 0;
 }

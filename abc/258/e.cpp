@@ -134,6 +134,57 @@ struct PrimeFact {
 };
 
 int main(){
-
+    ll n, q, x;
+    cin >> n >> q >> x;
+    vll w(n);
+    rep(i, n)cin >> w[i];
+    vll s(n+1, 0);// s[i]:w[i-1]までの累積和
+    rep(i, n){
+        s[i+1] = s[i]+w[i];
+    }
+    vll c(n); //ジャガイモiスタートで何個箱に入れるか
+    rep(i, n){
+        ll youryo = x+s[i]; // 容量をi-1までのジャガイモ分増やす
+        // youryo/s[n]:n個のジャガイモを加えることを何周できるか
+        // youryo%s[n]:何周かした後に残ってる容量
+        auto r = lower_bound(all(s), youryo%s[n]) - s.begin();
+        c[i] = (youryo/s[n])*n + r - i;
+        // cout << youryo << " " << r << " " << i << endl;
+        // cout << c[i] << endl;
+    }
+    vll ans(n+1), v(n, -1); // v[i]:i番目スタートは何回目か
+    ll id=0, cnt=0; //はじめ、0ジャガイモスタート
+    ll m=-1; // 周期
+    ll st=-1; //周期スタートの点
+    rep(i, n+1){
+        if(v[id]!=-1){
+            m = cnt-v[id];
+            st = v[id];
+            break;
+        }
+        ans[cnt] = c[id];
+        v[id] = cnt;
+        cnt++;
+        id = (id+c[id])%n;
+    }
+    // rep(i, n)cout << ans[i] << endl;
+    if(m==-1){
+        while(q){
+            q--;
+            ll k;
+            cin >> k;
+            k--;
+            cout << ans[k] << endl;
+        }
+        return 0;
+    }
+    while(q){
+        q--;
+        ll k;
+        cin >> k;
+        k--;
+        if(k<st) cout << ans[k] << endl;
+        else cout << ans[(k-st)%m+st] << endl;
+    }
     return 0;
 }

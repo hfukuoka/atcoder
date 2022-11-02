@@ -134,6 +134,13 @@ struct PrimeFact {
 };
 
 int main(){
-
+    ll w;
+    cin >> w;
+    cout << 297 << "\n";
+    rep_up(i, 1, 100){
+        cout << i << " ";
+        cout << 100*i << " ";
+        cout << i*10000 << (i==99 ? "\n":" ");
+    }
     return 0;
 }

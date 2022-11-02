@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
+#include<atcoder/all>
 using namespace std;
+using namespace atcoder;
 
 #define ll long long
 #define rep(i, n) for (ll i = 0; i < n; ++i)
@@ -87,7 +89,53 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+using mint = modint998244353;
 
+int main(){
+    ll t;
+    cin >> t;
+    vector<mint> power(1000000);
+    power[0] = 1;
+    rep(i, 1000000)power[i+1] = power[i]*(mint)26;
+    // rep(i, 100)cout << power[i].val() << endl;
+    while(t){
+        t--;
+        ll n;
+        string s;
+        cin >> n >> s;
+        ll m = (n+1)/2;
+        mint ans = 0;
+        bool f = true;
+        rep(i, m){
+            int a = s[i]-'A';
+            int b = s[n-i-1]-'A';
+            // if(t==0)cout << s[i] << " " << s[n-i-1] << endl;
+            mint cur;
+            if(i==m-1){
+                bool f=true;;
+                ll l = i;
+                while(l>=0){
+                    int a = s[l]-'A';
+                    int b = s[n-l-1]-'A';
+                    if(a<b){
+                        f = true;
+                        break;
+                    }else if(a>b){
+                        f=false;
+                        break;
+                    }
+                    l--;
+                }
+                cur = a;
+                if(f)cur++;
+                ans += cur;
+                break;
+            }
+            cur = (mint)a*power[m-i-1];
+            // if(t==0)cout << a << " "<< b<<" " << cur.val() << endl;
+            ans += cur;
+        }
+        cout << ans.val() << endl;
+    }
     return 0;
 }
