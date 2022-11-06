@@ -28,7 +28,8 @@ using namespace atcoder;
 #define pqgi priority_queue<int, vector<int>, greater<int>>
 #define bit(x,i)(((x)>>(i))&1)
 
-const ll INF = (1ll << 60);
+const ll INFll = (1ll << 60);
+const int INF = 1e9;
 const double pi = 3.14159265358979323846;
 template <typename T>
 inline bool chmax(T &a, T b) {
@@ -65,7 +66,7 @@ long long modDiv(long long a, long long b, long long m) {
 	return (a * modpow(b, m - 2, m)) % m;
 }
 
-using Graph = vector<vector<long long>>;
+using Graph = vector<vector<int>>;
 
 /*  PrimeFact
     init(N): 初期化。O(N log log N)
@@ -120,7 +121,53 @@ struct BIT {
     }
 };
 
-int main(){
+void dfs1(Graph &G, vector<bool> &seen, vector<int> &I, int v){
+    seen[v]=true;
+    for(auto nv:G[v]){
+        if(seen[nv])continue;
+        dfs1(G, seen, I, nv);
+    }
+    I.push_back(v);
+}
 
+void dfs2(Graph &rG, vector<bool> &seen, int v, ll &cnt){
+    seen[v]=true;
+    cnt++;
+    for(auto nv:rG[v]){
+        if(seen[nv])continue;
+        dfs2(rG, seen, nv, cnt);
+    }
+}
+
+int main(){
+    int n, m;
+    cin >> n >> m;
+    Graph G(n), rG(n);
+    rep(i, m){
+        int a, b;
+        cin >> a >> b;
+        a--, b--;
+        G[a].push_back(b);
+        rG[b].push_back(a);
+    }
+    vector<bool> seen(n, false);
+    vector<int> I;
+    rep(i, n){
+        if(seen[i])continue;
+        dfs1(G, seen, I, i);
+    }
+    // for(auto i:I)cout << i << " ";
+    // cout << endl;
+    seen.assign(n, false);
+    reverse(all(I));
+    ll ans = 0;
+    ll cnt;
+    for(auto i:I){
+        if(seen[i])continue;
+        cnt = 0;
+        dfs2(rG, seen, i, cnt);
+        if(cnt>1)ans += (cnt-1LL)*cnt/2LL;
+    }
+    cout << ans << endl;
     return 0;
 }

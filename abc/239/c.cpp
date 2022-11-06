@@ -87,7 +87,24 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+ll dx[8] = {2, 1, -1, -2, -2, -1, 1, 2};
+ll dy[8] = {1, 2, 2, 1, -1, -2, -2, -1};
 
+int main(){
+    ll x1, y1, x2, y2;
+    cin >> x1 >> y1 >> x2 >> y2;
+    rep(v1, 8){
+        ll nx = x1 + dx[v1];
+        ll ny = y1 + dy[v1];
+        rep(v2, 8){
+            ll nx = x1+dx[v1]+dx[v2];
+            ll ny = y1+dy[v1]+dy[v2];
+            if(nx==x2&&ny==y2){
+                cout << "Yes" << endl;
+                return 0;
+            }
+        }
+    }
+    cout << "No" << endl;
     return 0;
 }

@@ -28,7 +28,8 @@ using namespace atcoder;
 #define pqgi priority_queue<int, vector<int>, greater<int>>
 #define bit(x,i)(((x)>>(i))&1)
 
-const ll INF = (1ll << 60);
+const ll INFll = (1ll << 60);
+const int INF = 1e9;
 const double pi = 3.14159265358979323846;
 template <typename T>
 inline bool chmax(T &a, T b) {

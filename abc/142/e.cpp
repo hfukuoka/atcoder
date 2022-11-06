@@ -121,6 +121,35 @@ struct BIT {
 };
 
 int main(){
-
+    int n, m;
+    cin >> n >> m;
+    vi a(m), b(m);
+    vll t(m, 0);
+    vvi c(m);
+    rep(i, m){
+        cin >> a[i] >> b[i];
+        rep(j, b[i]){
+            int x;
+            cin >> x;
+            x--;
+            c[i].push_back(x);
+            t[i] |= (1<<x);
+        }
+    }
+    // rep(i, m){
+    //     cout << t[i] << endl;
+    // }
+    vvll dp(m+1, vll(1<<n, INF));
+    dp[0][0]=0;
+    rep(i, m){
+        rep(s, 1<<n){
+            chmin(dp[i+1][s], dp[i][s]);
+            chmin(dp[i+1][s|t[i]], dp[i][s]+a[i]);
+        }
+    }
+    ll ans;
+    if(dp[m][(1<<n)-1]==INF)ans = -1;
+    else ans = dp[m][(1<<n)-1];
+    cout << ans << endl;
     return 0;
 }

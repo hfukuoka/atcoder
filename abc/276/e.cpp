@@ -120,7 +120,63 @@ struct BIT {
     }
 };
 
-int main(){
+int di[4] = {0, 1, 0, -1};
+int dj[4] = {1, 0, -1, 0};
 
+int main(){
+    int h, w;
+    cin >> h >> w;
+    vector<vector<char>> c(h, vector<char>(w));
+    int si, sj;
+    rep(i, h)rep(j, w){
+        cin >> c[i][j];
+        if(c[i][j]=='S'){
+            si=i;
+            sj=j;
+        }
+    }
+    vector<vector<bool>> seen(h, vector<bool>(w, false));
+    auto bfs = [&](int ti, int tj, unordered_set<int> &st){
+        queue<P> q;
+        q.push({ti, tj});
+        while(!q.empty()){
+            auto [i, j] = q.front();
+            q.pop();
+            seen[i][j]=true;
+            rep(v, 4){
+                int ni = i+di[v];
+                int nj = j+dj[v];
+                if(ni<0 || ni>=h || nj<0 || nj>=w)continue;
+                if(c[ni][nj]=='#')continue;
+                if(seen[ni][nj])continue;
+                if(ni==si && nj==sj)continue;
+                if(st.count(ni*w+nj)){
+                    cout << "Yes" << "\n";
+                    return 1;
+                }
+                q.push({ni, nj});
+                seen[ni][nj]=true;
+            }
+        }
+        return 0;
+    };
+    unordered_set<int> st;
+    rep(d, 4){
+        int ti = si+di[d];
+        int tj = sj+dj[d];
+        if(ti<0 || ti>=h || tj<0 || tj>=w)continue;
+        if(c[ti][tj]=='#')continue;
+        st.insert(ti*w+tj);
+    }
+    rep(d, 3){
+        int ti = si+di[d];
+        int tj = sj+dj[d];
+        if(ti<0 || ti>=h || tj<0 || tj>=w)continue;
+        if(c[ti][tj]=='#')continue;
+        st.erase(ti*w+tj);
+        int f = bfs(ti, tj, st);
+        if(f)return 0;
+    }
+    cout << "No" << "\n";
     return 0;
 }

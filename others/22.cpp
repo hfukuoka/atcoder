@@ -121,6 +121,12 @@ struct BIT {
 };
 
 int main(){
-
+    int n, k;
+    ll s;
+    cin >> n >> k >> s;
+    vll a(n), c(n+1, 0);
+    rep(i, k){
+        
+    }
     return 0;
 }

@@ -28,7 +28,8 @@ using namespace atcoder;
 #define pqgi priority_queue<int, vector<int>, greater<int>>
 #define bit(x,i)(((x)>>(i))&1)
 
-const ll INF = (1ll << 60);
+const ll INFll = (1ll << 60);
+const int INF = 1e9;
 const double pi = 3.14159265358979323846;
 template <typename T>
 inline bool chmax(T &a, T b) {
@@ -120,7 +121,34 @@ struct BIT {
     }
 };
 
-int main(){
+int MAX = 300000;
 
+using mint = modint998244353;
+
+int main(){
+    int n;
+    cin >> n;
+    vi a(n);
+    rep(i, n)cin >> a[i];
+    vi b = a;
+    sort(all(b));
+    b.erase(unique(all(b)), b.end());
+    vi c(n);
+    rep(i, n){
+        c[i] = lower_bound(all(b), a[i])-b.begin();
+    }
+    // rep(i, n)cout << c[i] << " ";
+    // cout << endl;
+
+
+    mint x = 2;
+    BIT<mint> d(MAX);
+    mint ans = 0;
+    rep(i, n){
+        mint cur = d.sum(c[i]);
+        if(i>0)ans += cur*(mint)x.pow(i-1);
+        d.add(c[i], 1/(mint)x.pow(i));
+    }
+    cout << ans.val() << endl;
     return 0;
 }

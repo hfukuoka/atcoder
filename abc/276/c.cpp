@@ -121,6 +121,16 @@ struct BIT {
 };
 
 int main(){
-
+    int n;
+    cin >> n;
+    vi p(n);
+    rep(i, n){
+        cin >> p[i];
+    }
+    prev_permutation(all(p));
+    rep(i, n){
+        cout << p[i] << " ";
+    }
+    cout << endl;
     return 0;
 }

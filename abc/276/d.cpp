@@ -67,36 +67,26 @@ long long modDiv(long long a, long long b, long long m) {
 
 using Graph = vector<vector<long long>>;
 
-/*  PrimeFact
-    init(N): 初期化。O(N log log N)
-    get(n): クエリ。素因数分解を求める。O(log n)
- */
+/*  prime_factor(n)
+    入力：整数 n
+    出力：nの素因数分解
+    計算量：O(√n)前後
+*/
 template <typename T>
-struct PrimeFact {
-    vector<T> spf;
-    PrimeFact(T N) { init(N); }
-    void init(T N) { // 前処理。spf を求める
-        spf.assign(N + 1, 0);
-        for (T i = 0; i <= N; i++) spf[i] = i;
-        for (T i = 2; i * i <= N; i++) {
-            if (spf[i] == i) {
-                for (T j = i * i; j <= N; j += i) {
-                    if (spf[j] == j) {
-                        spf[j] = i;
-                    }
-                }
-            }
+vector<pair<T, T>> prime_factor(T n) {
+    vector<pair<T, T>> ret;
+    for (T i = 2; i * i <= n; i++) {
+        if (n % i != 0) continue;
+        T tmp = 0;
+        while (n % i == 0) {
+            tmp++;
+            n /= i;
         }
+        ret.push_back(make_pair(i, tmp));
     }
-    map<T, T> get(T n) { // nの素因数分解を求める
-        map<T, T> m;
-        while (n != 1) {
-            m[spf[n]]++;
-            n /= spf[n];
-        }
-        return m;
-    }
-};
+    if (n != 1) ret.push_back(make_pair(n, 1));
+    return ret;
+}
 
 template<typename T>
 struct BIT {
@@ -121,6 +111,37 @@ struct BIT {
 };
 
 int main(){
-
+    int n;
+    cin >> n;
+    vi a(n);
+    int g = 0;
+    rep(i, n){
+        cin >> a[i];
+        g = gcd(g, a[i]);
+    }
+    // cout << g << endl;
+    vector<P> vg = prime_factor<int>(g);
+    map<int, int> mp;
+    for(auto p:vg){
+        mp[p.first]=p.second;
+    }
+    ll ans = 0;
+    rep(i, n){
+        vector<pair<int, int>> v = prime_factor<int>(a[i]);
+        int m = v.size();
+        rep(j, m){
+            if(v[j].first==2){
+                ans += max(v[j].second-mp[2], 0);
+            }else if(v[j].first==3){
+                ans += v[j].second-mp[3];
+            }else{
+                if(mp[v[j].first]<v[j].second){
+                    cout << -1 << endl;
+                    return 0;
+                }
+            }
+        }
+    }
+    cout << ans <<endl;
     return 0;
 }

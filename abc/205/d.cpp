@@ -121,6 +121,26 @@ struct BIT {
 };
 
 int main(){
-
+    int n, q;
+    cin >> n >> q;
+    vll a(n), c(n);
+    rep(i, n){
+        cin >> a[i];
+        c[i] = a[i]-i-1;
+    }
+    rep(qi, q){
+        ll k;
+        cin >> k;
+        auto it = lower_bound(all(c), k);
+        ll ans;
+        if(it==c.end()){
+            ans = a[n-1]+k-c[n-1];
+        }else{
+            int id = it - c.begin();
+            ans = a[id]-1-(c[id]-k);
+            // cout << id << endl;
+        }
+        cout << ans << endl;
+    }
     return 0;
 }

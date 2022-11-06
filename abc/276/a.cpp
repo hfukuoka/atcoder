@@ -121,6 +121,15 @@ struct BIT {
 };
 
 int main(){
-
+    string s;
+    cin >> s;
+    ll n = s.size();
+    ll ans = -1;
+    rep(i, n){
+        if(s[i]=='a'){
+            ans = i+1;
+        }
+    }
+    cout << ans << endl;
     return 0;
 }

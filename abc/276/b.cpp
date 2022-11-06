@@ -121,6 +121,23 @@ struct BIT {
 };
 
 int main(){
-
+    int n, m;
+    cin >> n >> m;
+    Graph G(n);
+    rep(i, m){
+        int a, b;
+        cin >> a >> b;
+        a--, b--;
+        G[a].push_back(b);
+        G[b].push_back(a);
+    }
+    rep(i, n){
+        cout << G[i].size() << " ";
+        sort(all(G[i]));
+        for(auto a:G[i]){
+            cout << a+1 << " ";
+        }
+        cout << endl;
+    }
     return 0;
 }

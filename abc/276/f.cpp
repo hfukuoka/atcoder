@@ -120,7 +120,23 @@ struct BIT {
     }
 };
 
-int main(){
+int MAX = 200100;
+using mint = modint998244353;
 
+int main(){
+    int n, x;
+    mint d, s, ans;
+    cin >> n;
+    fenwick_tree<mint> d1(MAX), d2(MAX);
+    s=0;
+    rep(k, n){
+        cin >> x;
+        d = d1.sum(0, x+1)*mint(x) + d2.sum(x+1, MAX);
+        s = s+ mint(2)*d+mint(x);
+        mint ans = s*(mint(k+1).inv().pow(2));
+        cout << ans.val() << endl;
+        d1.add(x, mint(1));
+        d2.add(x, mint(x));
+    }
     return 0;
 }

@@ -11,7 +11,7 @@ using namespace atcoder;
 #define rep(i, n) for (int i = 0; i < n; ++i)
 #define rep_up(i, a, n) for (int i = a; i < n; ++i)
 #define rep_down(i, a, n) for (int i = a; i >= n; --i)
-#define P pair<int, int>
+#define P pair<long long, int>
 
 #define all(v) v.begin(), v.end()
 #define fi first
@@ -120,7 +120,45 @@ struct BIT {
     }
 };
 
-int main(){
+int MAX = 1000;
+int h, w;
+ll c;
 
+
+long long solve(vector<vector<long long>> a){
+    vvll dp(h, vll(w, INF));
+    vvll x(h, vll(w, INF));
+    rep(i, h)rep(j, w){
+        chmin(dp[i][j], a[i][j]);
+        if(i>0)chmin(dp[i][j], dp[i-1][j]+c);
+        if(j>0)chmin(dp[i][j], dp[i][j-1]+c);
+    }
+    ll res = INF;
+    rep(i, h){
+        rep(j, w){
+            if(i>0)chmin(x[i][j], dp[i-1][j]+c+a[i][j]);
+            if(j>0)chmin(x[i][j], dp[i][j-1]+c+a[i][j]);
+            chmin(res, x[i][j]);
+        }
+    }
+    return res;
+}
+
+
+
+int main(){
+    cin >> h >> w >> c;
+    vvll a(h, vll(w));
+    rep(i, h)rep(j, w)cin >> a[i][j];
+    ll ans = INF;
+    chmin(ans, solve(a));
+    vvll b(h, vll(w));
+    rep(i, h){
+        rep(j, w){
+            b[i][j] = a[i][w-1-j];
+        }
+    }
+    chmin(ans, solve(b));
+    cout << ans << endl;
     return 0;
 }

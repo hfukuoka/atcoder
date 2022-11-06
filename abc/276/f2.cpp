@@ -120,7 +120,25 @@ struct BIT {
     }
 };
 
-int main(){
+int MAX = 200100;
+using mint = modint998244353;
 
+int main(){
+    int n, x;
+    cin >> n;
+    BIT<mint> d1(MAX), d2(MAX);
+    mint p=0;
+    rep(k, n){
+        cin >> x;
+        mint sa = d1.sum(x)*mint(x) + d2.sum(MAX) - d2.sum(x);
+        sa = sa*mint(2)+mint(x);
+        mint bunsi = p + sa;
+        mint k2 = mint(k+1).pow(2).inv();
+        mint ans = bunsi*k2;
+        cout << ans.val() << endl;
+        p=bunsi;
+        d1.add(x, mint(1));
+        d2.add(x, mint(x));
+    }
     return 0;
 }
