@@ -27,6 +27,9 @@ using namespace atcoder;
 #define pqi priority_queue<int>
 #define pqgi priority_queue<int, vector<int>, greater<int>>
 #define bit(x,i)(((x)>>(i))&1)
+#define pb push_back
+#define eb emplace_back
+#define mp make_pair
 
 const ll INF = (1ll << 60);
 const double pi = 3.14159265358979323846;
