@@ -102,7 +102,26 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+using mint = modint998244353;
 
+int main(){
+    int n, m;
+    cin >> n >> m;
+    vector<int> p(n);
+    rep(i, n){
+        cin >> p[i];
+        p[i]--;
+    }
+    mint ans = 0;
+    dsu uf(n);
+    int x = n;
+    rep(i, n){
+        int ni = p[i];
+        if(uf.same(i, ni))continue;
+        ans += mint(m).pow(x-1)*(m-1)/2;
+        x--;
+        uf.merge(i, ni);
+    }
+    cout << ans.val() << endl;
     return 0;
 }

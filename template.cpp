@@ -49,6 +49,7 @@ inline bool chmin(T &a, T b) {
     }
     return 0;
 }
+template<typename Tx, typename Ty>Tx dup(Tx x, Ty y){return (x+y-1)/y;}
 ll mypow(ll a, ll n) {
     ll ret = 1;
     rep(i, n) {

@@ -24,6 +24,5 @@
     "limits": "cpp",
     "valarray": "cpp"
   },
-  "C_Cpp.errorSquiggles": "Disabled",
   "editor.tabSize": 4
 }

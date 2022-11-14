@@ -4,8 +4,8 @@ using namespace std;
 using namespace atcoder;
 
 #define ll long long
-#define rep(i, n) for (ll i = 0; i < n; ++i)
-#define rep_up(i, a, n) for (ll i = a; i < n; ++i)
+#define rep(i, n) for (int i = 0; i < n; ++i)
+#define rep_up(i, a, n) for (int i = a; i < n; ++i)
 #define rep_down(i, a, n) for (ll i = a; i >= n; --i)
 #define P pair<ll, ll>
 
@@ -18,7 +18,7 @@ using namespace atcoder;
 #define pqll priority_queue<ll>
 #define pqllg priority_queue<ll, vector<ll>, greater<ll>>
 
-const ll INF = (1ll << 60);
+const int INF = 1<<30;
 const ll mod = 1000000007;
 const double pi = 3.14159265358979323846;
 template <typename T>
@@ -37,6 +37,8 @@ inline bool chmin(T &a, T b) {
     }
     return 0;
 }
+template<typename Tx, typename Ty>Tx dup(Tx x, Ty y){return (x+y-1)/y;}
+
 ll mypow(ll a, ll n) {
     ll ret = 1;
     rep(i, n) {
@@ -102,7 +104,43 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+int solve1(int a, int b){
+    int res = dup(b, a)*a-b;
+    rep(x, a){
+        int m = a+x;
+        chmin(res, x+(dup(b,m)*m-b));
+    }
+    return res;
+}
 
+int solve2(int a, int b){
+    int mx = b/a;
+    int res = dup(b, a)*a-b;
+    // cout << mx << endl;
+    rep_up(n,1, mx+1){
+        int by = dup(b,n)*n;
+        int y = by-b;
+        int x = by/n-a;
+        // if(x+y<0)cout << x <<" "<< y << endl;
+        chmin(res, x+y);
+        // cout << a << " " << b << endl;
+        // cout << n << endl;
+        // cout << by << endl;
+        // cout << x << " " << y << endl;
+    }
+    return res;
+}
+
+int main(){
+    int t;
+    cin >> t;
+    rep(i, t){
+        int a, b;
+        cin >> a >> b;
+        int ans;
+        if(a<32000)ans=solve1(a, b);
+        else ans=solve2(a, b);
+        cout << ans << endl;
+    }
     return 0;
 }

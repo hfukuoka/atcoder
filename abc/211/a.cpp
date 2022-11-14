@@ -135,6 +135,9 @@ struct PrimeFact {
 };
 
 int main(){
-
+    int a, b;
+    cin >> a >> b;
+    double c = (double)(a-b)/3.0 + b;
+    printf("%.10f\n", c);
     return 0;
 }
