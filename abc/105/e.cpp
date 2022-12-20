@@ -134,6 +134,23 @@ struct PrimeFact {
 };
 
 int main(){
-
+    int n, m;
+    cin >> n >> m;
+    vll a(n), s(n+1, 0);
+    rep(i, n){
+        cin >> a[i];
+        s[i+1] = s[i]+a[i];
+    }
+    map<int, int> mp;
+    rep(i, n+1){
+        mp[s[i]%m]++;
+    }
+    ll ans = 0;
+    for(auto p: mp){
+        if(p.second>=2){
+            ans += p.second*(p.second-1LL)/2LL;
+        }
+    }
+    cout << ans << endl;
     return 0;
 }

@@ -102,7 +102,20 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+using mint = modint998244353;
 
+int main(){
+    int n;
+    cin >> n;
+    vector<int> a(n-1);
+    rep(i, n)cin >> a[i];
+    vector<mint> dp(n, 0);
+    vector<mint> s(n+1, 0);
+    rep_down(i, n-2, 0){
+        mint p = mint(1)/mint(a[i]+1);
+        dp[i] = p/(1-p)*(s[i+1]-s[i+1+a[i]])+1/(1-p);
+        s[i] = s[i+1]+dp[i];
+    }
+    cout << dp[0].val() << endl;
     return 0;
 }

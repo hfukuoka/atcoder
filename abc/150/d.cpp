@@ -124,6 +124,43 @@ struct BIT {
 };
 
 int main(){
-
+    ll n, m;
+    cin >> n >> m;
+    vll a(n), b(n);
+    auto count2 = [](ll x){
+        ll res = 0;
+        while(x%2==0){
+            x /= 2;
+            res++;
+        }
+        return res;
+    };
+    ll cnt = -1;
+    rep(i, n) {
+        cin >> a[i];
+        b[i] = a[i]/2;
+        if(cnt==-1)cnt = count2(a[i]);
+        else if(cnt != count2(a[i])){
+            cout << "0\n";
+            return 0;
+        }
+    }
+    ll lb = 1LL;
+    rep(i, n){
+        ll g = gcd(lb, b[i]);
+        lb = lb/g*b[i];
+        if(lb>m){
+            cout << "0\n";
+            return 0;
+        }
+    }
+    ll la = 1LL;
+    rep(i, n){
+        ll g = gcd(la, a[i]);
+        la = la/g*a[i];
+    }
+    ll ans = (m-lb)/la;
+    // cout << la << " " << lb << endl;
+    cout << ans+1 << endl;
     return 0;
 }

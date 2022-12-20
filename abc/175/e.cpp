@@ -121,6 +121,35 @@ struct BIT {
 };
 
 int main(){
-
+    int R, C, K;
+    cin >> R >> C >> K;
+    vvll a(R, vll(C, 0));
+    rep(i, K){
+        int r, c;
+        ll v;
+        cin >> r >> c >> v;
+        r--, c--;
+        a[r][c] = v;
+    }
+    vvvll dp(R, vvll(C, vll(4, -INF)));
+    dp[0][0][0] = 0;
+    if(a[0][0]>0)dp[0][0][1] = a[0][0];
+    rep(i, R){
+        rep(j, C){
+            rep(k, 4){
+                if(i+1<R){
+                    chmax(dp[i+1][j][0], dp[i][j][k]);
+                    if(a[i+1][j]>0)chmax(dp[i+1][j][1], dp[i][j][k]+a[i+1][j]);
+                }
+                if(j+1<C){
+                    chmax(dp[i][j+1][k], dp[i][j][k]);
+                    if(k+1<=3 && a[i][j+1]>0)chmax(dp[i][j+1][k+1], dp[i][j][k]+a[i][j+1]);
+                }
+            }
+        }
+    }
+    ll ans = 0;
+    rep(k, 4)chmax(ans, dp[R-1][C-1][k]);
+    cout << ans << endl;
     return 0;
 }

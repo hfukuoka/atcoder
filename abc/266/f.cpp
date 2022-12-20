@@ -89,7 +89,62 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+int n;
+vector<vector<int>> g;
+vector<bool> is_cycle;
+vector<int> deg;
+vector<int> root_id;
 
+void dfs(int v, int p){
+    root_id[v] = root_id[p];
+    for(auto nv:g[v]){
+        if(nv!=p) dfs(nv, v);
+    }
+}
+
+int main(){
+    cin >> n;
+    g.resize(n);
+    is_cycle.assign(n, true);
+    deg.assign(n, 0);
+    root_id.assign(n, -1);
+    rep(i, n){
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+        g[u].push_back(v);
+        g[v].push_back(u);
+        deg[u]++;
+        deg[v]++;
+    }
+    queue<int> q;
+    rep(i, n){
+        if(deg[i]==1)q.push(i);
+    }
+    while(!q.empty()){
+        int v = q.front(); q.pop();
+        is_cycle[v]=false;
+        for(auto nv:g[v]){
+            deg[nv]--;
+            if(deg[nv]==1)q.push(nv);
+        }
+    }
+    rep(i, n){
+        if(is_cycle[i]){
+            root_id[i]=i;
+            for(auto to:g[i]){
+                if(!is_cycle[to]) dfs(to, i);
+            }
+        }
+    }
+    int Q;
+    cin >> Q;
+    rep(qi, Q){
+        int x, y;
+        cin >> x >> y;
+        x--, y--;
+        if(root_id[x]==root_id[y]) cout << "Yes" << '\n';
+        else cout << "No" << '\n';
+    }
     return 0;
 }

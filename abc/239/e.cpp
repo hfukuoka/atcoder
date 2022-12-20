@@ -87,7 +87,50 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+int n, q;
+vll x;
+vvll ans;
+vvll G;
 
+void dfs(int v, int p){
+    priority_queue<ll, vll, greater<ll>> pq;
+    pq.push(x[v]);
+    for(auto nv:G[v]){
+        if(nv==p)continue;
+        dfs(nv, v);
+        for(auto a:ans[nv]){
+            pq.push(a);
+            if(pq.size()>20)pq.pop();
+        }
+    }
+    while(!pq.empty()){
+        ans[v].push_back(pq.top());
+        pq.pop();
+    }
+    reverse(all(ans[v]));
+    return;
+}
+
+
+int main(){
+    cin >> n >> q;
+    x.resize(n);
+    G.resize(n);
+    ans.resize(n);
+    rep(i, n)cin >> x[i];
+    rep(i, n-1){
+        int a, b;
+        cin >> a >> b;
+        a--, b--;
+        G[a].push_back(b);
+        G[b].push_back(a);
+    }
+    dfs(0, -1);
+    rep(qi, q){
+        int v, k;
+        cin >> v >> k;
+        v--, k--;
+        cout << ans[v][k] << endl;
+    }
     return 0;
 }

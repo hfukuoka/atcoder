@@ -90,6 +90,38 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    int n;
+    cin >> n;
+    vvll a(n, vll(n));
+    rep(i, n)rep(j, n)cin >> a[i][j];
+    vector dp1(n, vector<map<ll, ll>>(n));
+    vector dp2(n, vector<map<ll, ll>>(n)); // (n-1, n-1)までで0になるには(i, j)までの和がなんだったら良いか
+    dp1[0][0][a[0][0]] = 1;
+    rep(i, n){
+        rep(j, n){
+            if(i+j>=n-1)break;
+            for(auto [k, d]:dp1[i][j]){
+                if(i+1<n)dp1[i+1][j][k^a[i+1][j]] += dp1[i][j][k];
+                if(j+1<n)dp1[i][j+1][k^a[i][j+1]] += dp1[i][j][k];
+            }
+        }
+    }
+    dp2[n-1][n-1][0] = 1;
+    ll ans = 0;
+    rep_down(i, n-1, 0){
+        rep_down(j, n-1, 0){
+            if(i+j<n){
+                for(auto [k, d]:dp2[i][j]){
+                    ans += dp1[i][j][k] * dp2[i][j][k];
+                }
+                break;
+            }
+            for(auto [k, d]:dp2[i][j]){
+                if(i-1>=0) dp2[i-1][j][k^a[i][j]] += dp2[i][j][k];
+                if(j-1>=0) dp2[i][j-1][k^a[i][j]] += dp2[i][j][k];
+            }
+        }
+    }
+    cout << ans << endl;
     return 0;
 }

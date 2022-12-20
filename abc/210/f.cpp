@@ -121,7 +121,26 @@ struct BIT {
     }
 };
 
-int main(){
+int n, m;
+vector<pair<ll, ll>> ps;
 
+int main(){
+    cin >> n >> m;
+    ps.resize(m);
+    rep(i, m)cin >> ps[i].second >> ps[i].first;
+
+    sort(all(ps));
+
+    ll ans = 0;
+    ll pre = n;
+    ll g = n;
+
+    for(auto [c, a]:ps){
+        g = gcd(g, a);
+        ans += c*(pre-g);
+        pre = g;
+    }
+    if(pre!=1)ans=-1;
+    cout << ans << endl;
     return 0;
 }

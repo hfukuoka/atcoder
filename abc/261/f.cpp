@@ -103,6 +103,46 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    int n;
+    cin >> n;
+    vll c(n), x(n);
+    vvll a(n);
+    rep(i, n){
+        cin >> c[i];
+        c[i]--;
+    }
+    rep(i, n){
+        cin >> x[i];
+        x[i]--;
+    }
+    rep(i, n){
+        a[c[i]].push_back(x[i]);
+    }
+    rep(i, n){
+        vll b = a[i];
+        sort(all(b));
+        b.erase(unique(all(b)), b.end());
+        rep(j, (int)a[i].size()){
+            a[i][j] = lower_bound(all(b), a[i][j]) - b.begin();
+        }
+    }
+    fenwick_tree<ll> bt(n);
+    ll inva=0, invb=0; // inva: xの転倒数, invb: 同じ色同士だけ抽出した場合の転倒数の合計
+    rep(i, n){
+        bt.add(x[i], 1LL);
+        inva += bt.sum(x[i]+1LL, n);
+    }
+    rep(k, n){
+        int m = a[k].size();
+        int mx = 0;
+        rep(i, m)chmax(mx, (int)a[k][i]);
+        fenwick_tree<ll> t(mx+1);
+        rep(i, m){
+            t.add(a[k][i], 1LL);
+            invb += t.sum(a[k][i]+1, mx+1);
+        }
+    }
+    ll ans = inva-invb;
+    cout << ans << endl;
     return 0;
 }

@@ -53,41 +53,60 @@ long long modpow(long long a, long long n, long long mod) {
     return res;
 }
 
-using Graph = vector<vector<long long>>;
+int n, m;
+vector<vector<int>> g;
+vector<vector<int>> rg;
+vector<bool> seen1;
+vector<bool> seen2;
+vector<bool> fin;
+vector<int> cr;
+set<int> s;
 
-// 探索
-vector<bool> seen, finished;
-
-// サイクル復元のための情報
-int pos = -1; // サイクル中に含まれる頂点 pos
-stack<int> hist; // 訪問履歴
-
-void dfs(const Graph &G, int v, int p) {
-    seen[v] = true;
-    hist.push(v);
-    for (auto nv : G[v]) {
-        if (nv == p) continue; // 逆流を禁止する
-
-        // 完全終了した頂点はスルー
-        if (finished[nv]) continue;
-
-        // サイクルを検出
-        if (seen[nv] && !finished[nv]) {
-            pos = nv;
+void dfs1(int v, int p){
+    for(auto nv:g[v]){
+        // if(nv==p)continue;
+        if(fin[nv])continue;
+        if(seen1[nv] && !fin[nv]){
+            cr.push_back(nv);
             return;
         }
-
-        // 再帰的に探索
-        dfs(G, nv, v);
-
-        // サイクル検出したならば真っ直ぐに抜けていく
-        if (pos != -1) return;
+        seen1[nv] = true;
+        dfs1(nv, v);
     }
-    hist.pop();
-    finished[v] = true;
+    fin[v] = true;
+}
+
+void dfs2(int v, int p){
+    s.insert(v);
+    for(auto nv:rg[v]){
+        if(nv==p)continue;
+        if(seen2[nv])continue;
+        seen2[nv]=true;
+        dfs2(nv, v);
+    }
 }
 
 int main(){
-
+    cin >> n >> m;
+    g.resize(n);
+    rg.resize(n);
+    rep(i, m){
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+        g[u].push_back(v);
+        rg[v].push_back(u);
+    }
+    seen1.assign(n, false);
+    seen2.assign(n, false);
+    fin.assign(n, false);
+    rep(i,n){
+        if(!seen1[i])dfs1(i, -1);
+    }
+    // for(auto v:cr)cout << v << endl;
+    for(int i:cr){
+        if(!seen2[i])dfs2(i, -1);
+    }
+    cout << s.size() << endl;
     return 0;
 }

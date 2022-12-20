@@ -134,6 +134,39 @@ struct PrimeFact {
 };
 
 int main(){
-
+    int n;
+    cin >> n;
+    vector<map<int, int>> mps(n);
+    map<int, bool> ok;
+    map<int, int> l;
+    rep(i, n){
+        int m;
+        cin >> m;
+        rep(j, m){
+            int p, e;
+            cin >> p >> e;
+            mps[i][p] = e;
+            if(l[p]<e){
+                l[p] = e;
+                ok[p] = true;
+            }else if(l[p]==e){
+                ok[p] = false;
+            }
+        }
+    }
+    ll ans = 0;
+    bool lcm = false;
+    rep(i, n){
+        bool f = false;
+        for(auto [p, e]:mps[i]){
+            if(e == l[p] && ok[p]){
+                ans++;
+                f = true;
+                break;
+            }
+        }
+        if(!f)lcm = true;
+    }
+    cout << (lcm ? ans+1:ans) << endl;
     return 0;
 }

@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
+#include <atcoder/all>
 using namespace std;
+using namespace atcoder;
 
 #define ll long long
 #define rep(i, n) for (ll i = 0; i < n; ++i)
@@ -87,7 +89,34 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+using mint = modint998244353;
 
+int main(){
+    ll h, w, k;
+    cin >> h >> w >> k;
+    ll si, sj, gi, gj;
+    cin >> si >> sj >> gi >> gj;
+    si--, sj--, gi--, gj--;
+    vector<mint> dp(4, 0);
+    if(si==gi && sj==gj)dp[0]=1;
+    if(si==gi && sj!=gj)dp[1]=1;
+    if(si!=gi && sj==gj)dp[2]=1;
+    if(si!=gi && sj!=gj)dp[3]=1;
+    rep(i, k){
+        vector<mint> ndp(4, 0);
+        ndp[3] += dp[3]*(h+w-4);
+        ndp[1] += dp[3];
+        ndp[2] += dp[3];
+        ndp[1] += dp[0]*(w-1);
+        ndp[2] += dp[0]*(h-1);
+        ndp[0] += dp[1];
+        ndp[1] += dp[1]*(w-2);
+        ndp[3] += dp[1]*(h-1);
+        ndp[0] += dp[2];
+        ndp[2] += dp[2]*(h-2);
+        ndp[3] += dp[2]*(w-1);
+        swap(ndp, dp);
+    }
+    cout << dp[0].val() << endl;
     return 0;
 }

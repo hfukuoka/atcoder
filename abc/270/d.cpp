@@ -87,18 +87,20 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
+// const ll INF = 1LL<<60;
+
 int main(){
     ll n, k;
     cin >> n >> k;
     vector<ll> a(k);
     rep(i, k)cin >> a[i];
-    vll dp(n+1, 0);
+    vll dp(n+1, -INF);
+    dp[0]=0;
     rep(i, n+1){
         rep(j, k){
-            if(a[j]>i)break;
-            chmax(dp[i], i-dp[i-a[j]]);
+            if(i+a[j]<=n)chmax(dp[i+a[j]], -dp[i]+a[j]);
         }
     }
-    cout << dp[n] << endl;
+    cout << (dp[n]+n)/2 << endl;
     return 0;
 }

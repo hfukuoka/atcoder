@@ -134,6 +134,28 @@ struct PrimeFact {
 };
 
 int main(){
-
+    int n;
+    cin >> n;
+    vll a(n+1), id(n+1);
+    set<ll> s;
+    rep_up(i, 1, n+1){
+        cin >> a[i];
+        id[a[i]] = i;
+        s.insert(i);
+    }
+    s.insert(0);
+    s.insert(n+1);
+    ll ans = 0;
+    sort(all(a));
+    rep_down(i, n, 1){
+        ll idx = id[a[i]];
+        auto it = s.find(idx);
+        it--;
+        ll l = *it;
+        it++;it++;
+        ll r = *it;
+        ans += a[i]*(idx-l)*(r-idx);
+        s.erase(idx);
+    }cout << ans << endl;
     return 0;
 }

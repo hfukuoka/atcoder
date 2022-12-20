@@ -88,6 +88,28 @@ void dfs(const Graph &G, int v, int p) {
 }
 
 int main(){
-
+    int n, Q;
+    cin >> n >> Q;
+    Graph G(n+1);
+    rep(qi, Q){
+        int l, r;
+        cin >> l >> r;
+        l--, r--;
+        G[l].push_back(r+1);
+        G[r+1].push_back(l);
+    }
+    queue<ll> q;
+    q.push(0);
+    vector<bool> seen(n+1, false);
+    seen[0] = true;
+    while(!q.empty()){
+        ll v = q.front(); q.pop();
+        for(auto nv:G[v]){
+            if(seen[nv])continue;
+            seen[nv] = true;
+            q.push(nv);
+        }
+    }
+    cout << (seen[n] ? "Yes" : "No" ) << endl;
     return 0;
 }
