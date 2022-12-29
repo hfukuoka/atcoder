@@ -124,7 +124,40 @@ struct BIT {
     }
 };
 
-int main(){
+int a, b, c;
 
+ll solve(vector<int> l){
+    int n = l.size();
+    ll res = INF;
+    if(n>3){
+        rep(i, n){
+            rep_up(j, i+1, n){
+                vector<int> nl;
+                nl.push_back(l[i]+l[j]);
+                rep(k, n){
+                    if(k==i || k== j)continue;
+                    nl.push_back(l[k]);
+                }
+                chmin(res, 10+solve(nl));
+            }
+        }
+    }
+    rep(i, n){
+        rep(j, n){
+            rep(k, n){
+                if(i==j || j==k || k==i)continue;
+                chmin(res, (ll)abs(a-l[i])+abs(b-l[j])+abs(c-l[k]));
+            }
+        }
+    }
+    return res;
+}
+
+int main(){
+    int n;
+    cin >> n >> a >> b >> c;
+    vector<int> l(n);
+    rep(i, n)cin >> l[i];
+    cout << solve(l) << endl;
     return 0;
 }

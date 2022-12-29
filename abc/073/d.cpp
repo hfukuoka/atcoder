@@ -26,7 +26,8 @@ using namespace atcoder;
 #define pqllg priority_queue<ll, vector<ll>, greater<ll>>
 #define pqi priority_queue<int>
 #define pqgi priority_queue<int, vector<int>, greater<int>>
-#define bit(x,i)(((x)>>(i))&1)
+#define pb push_back
+#define eb emplace_back
 
 const ll INF = (1ll << 60);
 const double pi = 3.14159265358979323846;
@@ -46,6 +47,7 @@ inline bool chmin(T &a, T b) {
     }
     return 0;
 }
+template<typename Tx, typename Ty>Tx dup(Tx x, Ty y){return (x+y-1)/y;}
 ll mypow(ll a, ll n) {
     ll ret = 1;
     rep(i, n) {
@@ -65,93 +67,39 @@ long long modDiv(long long a, long long b, long long m) {
 	return (a * modpow(b, m - 2, m)) % m;
 }
 
-using Graph = vector<vector<long long>>;
-
-/*  PrimeFact
-    init(N): 初期化。O(N log log N)
-    get(n): クエリ。素因数分解を求める。O(log n)
- */
-template <typename T>
-struct PrimeFact {
-    vector<T> spf;
-    PrimeFact(T N) { init(N); }
-    void init(T N) { // 前処理。spf を求める
-        spf.assign(N + 1, 0);
-        for (T i = 0; i <= N; i++) spf[i] = i;
-        for (T i = 2; i * i <= N; i++) {
-            if (spf[i] == i) {
-                for (T j = i * i; j <= N; j += i) {
-                    if (spf[j] == j) {
-                        spf[j] = i;
-                    }
-                }
-            }
-        }
-    }
-    map<T, T> get(T n) { // nの素因数分解を求める
-        map<T, T> m;
-        while (n != 1) {
-            m[spf[n]]++;
-            n /= spf[n];
-        }
-        return m;
-    }
-};
-
-template<typename T>
-struct BIT {
-    int n;
-    vector<T> d;
-    BIT(int n=0):n(n),d(n+1) {}
-    void add(int i, T x=1) {
-        for (i++; i <= n; i += i&-i) {
-            d[i] += x;
-        }
-        }
-    T sum(int i) {
-        T x = 0;
-        for (i++; i; i -= i&-i) {
-            x += d[i];
-        }
-        return x;
-    }
-    T sum(int l, int r) {
-        return sum(r-1) - sum(l-1);
-    }
-};
-
-struct edge{
-    ll to;
-    ll cost;
-};
-
 int main(){
-    int n, m;
-    cin >> n >> m;
-    vector<vector<edge>> g(n);
+    int n, m, r;
+    cin >> n >> m >> r;
+    vll v(r);
+    rep(i, r){
+        cin >> v[i];
+        v[i]--;
+    }
+    vvll d(n, vll(n, INF));
+    rep(i, n)d[i][i] = 0;
     rep(i, m){
         ll a, b, c;
         cin >> a >> b >> c;
         a--, b--;
-        g[a].push_back({b, c});
+        d[a][b] = c;
+        d[b][a] = c;
     }
-    vvll dp(n, vll(n, INF));
-    rep(v, n){
-        dp[v][v] = 0;
-        for(auto [nv, c]:g[v]){
-            dp[v][nv] = c;
+    rep(k, n)rep(i, n)rep(j, n){
+        if(d[i][k]!=INF && d[k][j]!=INF)chmin(d[i][j], d[i][k]+d[k][j]);
+    }
+
+    sort(all(v));
+    ll ans = INF;
+    int sz = v.size();
+    do{
+        ll res = 0;
+        rep(i, sz-1){
+            int c = v[i];
+            int nc = v[i+1];
+            res += d[c][nc];
         }
-    }
-    ll ans = 0;
-    rep(k, n){
-        rep(i, n){
-            rep(j, n){
-                if(dp[i][k]!=INF && dp[k][j]!=INF) chmin(dp[i][j], dp[i][k]+dp[k][j]);
-                if(dp[i][j]==INF)continue;
-                ans += dp[i][j];
-            }
-        }
-    }
+        chmin(ans, res);
+    }while(next_permutation(all(v)));
     cout << ans << endl;
     return 0;
 }

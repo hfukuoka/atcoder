@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
+#include <atcoder/all>
 using namespace std;
+using namespace atcoder;
 
 #define ll long long
 #define rep(i, n) for (ll i = 0; i < n; ++i)
@@ -87,7 +89,59 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+const int MOD = 998244353;
+vector<long long> fact, fact_inv, inv;
+/*  init_nCk :二項係数のための前処理
+    計算量:O(n)
+*/
+void init_nCk(int SIZE) {
+    fact.resize(SIZE + 5);
+    fact_inv.resize(SIZE + 5);
+    inv.resize(SIZE + 5);
+    fact[0] = fact[1] = 1;
+    fact_inv[0] = fact_inv[1] = 1;
+    inv[1] = 1;
+    for (int i = 2; i < SIZE + 5; i++) {
+        fact[i] = fact[i - 1] * i % MOD;
+        inv[i] = MOD - inv[MOD % i] * (MOD / i) % MOD;
+        fact_inv[i] = fact_inv[i - 1] * inv[i] % MOD;
+    }
+}
+/*  nCk :MODでの二項係数を求める(前処理 int_nCk が必要)
+    計算量:O(1)
+*/
+long long nCk(int n, int k) {
+    assert(!(n < k));
+    assert(!(n < 0 || k < 0));
+    return fact[n] * (fact_inv[k] * fact_inv[n - k] % MOD) % MOD;
+}
 
+using mint = modint998244353;
+
+int main(){
+    string s;
+    cin >> s;
+    int n = s.size();
+    vector<int> f(26, 0);
+    rep(i, n){
+        int c = s[i]-'a';
+        f[c]++;
+    }
+    vector<vector<mint>> dp(27, vector<mint>(n+1, 0));
+    dp[0][0] = 1;
+    init_nCk(n+1);
+    rep_up(i, 1, 27){
+        rep(j, n+1){
+            rep(k, f[i-1]+1){
+                if(j-k<0)break;
+                dp[i][j] += dp[i-1][j-k] * nCk(j, k);
+            }
+        }
+    }
+    mint ans = 0;
+    rep_up(i, 1, n+1){
+        ans += dp[26][i];
+    }
+    cout << ans.val() << endl;
     return 0;
 }
