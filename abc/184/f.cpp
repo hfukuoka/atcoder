@@ -132,6 +132,30 @@ struct PrimeFact {
 };
 
 int main(){
-
+    int n;
+    ll t;
+    cin >> n >> t;
+    vll a(n);
+    rep(i,n)cin >> a[i];
+    set<ll> st;
+    rep(s, 1<<(n/2)){
+        ll sum = 0;
+        rep(i, n/2){
+            if(s>>i&1)sum += a[i];
+        }
+        st.insert(sum);
+    }
+    ll ans = 0;
+    rep(s, 1<<(n-(n/2))){
+        ll sum = 0;
+        rep(i, (n-n/2)){
+            if(s>>i&1)sum += a[n-i-1];
+        }
+        auto it = st.upper_bound(t-sum);
+        if(it==st.begin())continue;
+        it--;
+        chmax(ans, sum + *it);
+    }
+    cout << ans << endl;
     return 0;
 }

@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
+#include <atcoder/all>
 using namespace std;
+using namespace atcoder;
 
 #define ll long long
 #define rep(i, n) for (ll i = 0; i < n; ++i)
@@ -53,7 +55,48 @@ long long modpow(long long a, long long n, long long mod) {
     return res;
 }
 
-int main(){
+vector<int> compress(vector<int> v){
+    int n = v.size();
+    vector<int> x = v;
+    sort(all(x));
+    x.erase(unique(all(x)), x.end());
+    vector<int> res(n);
+    rep(i, n){
+        res[i] = lower_bound(all(x), v[i]) - x.begin();
+    }
+    return res;
+}
 
+bool asc_desc(pair<int, int>& left, pair<int, int>& right) {
+    if (left.first == right.first) {
+        return right.second < left.second;
+    } else {
+        return left.first  < right.first;
+    }
+}
+
+int main(){
+    int n;
+    cin >> n;
+    vector<int> as(n), bs(n);
+    rep(i, n)cin >> as[i];
+    rep(i, n)cin >> bs[i];
+    as = compress(as);
+    bs = compress(bs);
+
+    vector<pair<int, int>> ps(n);
+    rep(i, n)ps[i] = {as[i], bs[i]};
+    sort(all(ps), asc_desc);
+
+    fenwick_tree<int> t(n+5);
+    ll ans = 0;
+    rep(i, n){
+        ll cnt = 1;
+        while(i+1<n && ps[i]==ps[i+1])cnt++, i++; // 同じ(a, b)をカウントしていく
+        auto [a, b] = ps[i];
+        ans += cnt*((ll)t.sum(b, n+1)+cnt); // cnt*t.sum: cnt個の同じペアに対して, それまで記録したbで現在のb以上のものの個数 cnt*cnt:同じ(a, b)同士を選ぶ場合の個数
+        t.add(b, cnt);
+    }
+    cout << ans << endl;
     return 0;
 }

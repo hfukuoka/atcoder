@@ -122,7 +122,22 @@ struct BIT {
     }
 };
 
-int main(){
+using mint = modint998244353;
 
+int main(){
+    int n, s;
+    cin >> n >> s;
+    vector<int> a(n);
+    rep(i, n)cin >> a[i];
+    vector dp(n+1, vector<mint>(s+1, 0)); // dp[i][j] : sigma_k(iまで見て総和がjとなる長さkの部分列の個数/(2^k))
+    dp[0][0] = 1;
+    rep(i, n){
+        rep(j, s+1){
+            dp[i+1][j] += dp[i][j];
+            if(j+a[i]<=s)dp[i+1][j+a[i]] += dp[i][j]/mint(2);
+        }
+    }
+    mint ans = dp[n][s] * mint(2).pow(n);
+    cout << ans.val() << endl;
     return 0;
 }

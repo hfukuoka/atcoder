@@ -18,6 +18,33 @@ using namespace atcoder;
 #define pqll priority_queue<ll>
 #define pqllg priority_queue<ll, vector<ll>, greater<ll>>
 
+
+for(int i=0; i<n; ++i){
+    
+}
+for(int i=0; i<n; ++i){
+    
+}
+for(int i=0; i<n; ++i){
+    
+}
+for(int i=0; i<n; ++i){
+    
+}
+for(int i=0; i<n; ++i){
+    
+}
+for(int i=0; i<n; ++i){
+    
+}
+for(int i=0; i<n; ++i){
+    
+}
+
+
+
+
+
 const ll INF = (1ll << 60);
 const ll mod = 1000000007;
 const double pi = 3.14159265358979323846;

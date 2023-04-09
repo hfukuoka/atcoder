@@ -4,10 +4,14 @@ using namespace std;
 using namespace atcoder;
 
 #define ll long long
-#define rep(i, n) for (ll i = 0; i < n; ++i)
-#define rep_up(i, a, n) for (ll i = a; i < n; ++i)
-#define rep_down(i, a, n) for (ll i = a; i >= n; --i)
-#define P pair<ll, ll>
+#define repll(i, n) for (ll i = 0; i < n; ++i)
+#define rep_upll(i, a, n) for (ll i = a; i < n; ++i)
+#define rep_downll(i, a, n) for (ll i = a; i >= n; --i)
+#define Pll pair<ll, ll>
+#define rep(i, n) for (int i = 0; i < n; ++i)
+#define rep_up(i, a, n) for (int i = a; i < n; ++i)
+#define rep_down(i, a, n) for (int i = a; i >= n; --i)
+#define P pair<int, int>
 
 #define all(v) v.begin(), v.end()
 #define fi first
@@ -15,12 +19,24 @@ using namespace atcoder;
 #define vvvll vector<vector<vector<ll>>>
 #define vvll vector<vector<ll>>
 #define vll vector<ll>
+#define vvvi vector<vector<vector<int>>>
+#define vvi vector<vector<int>>
+#define vi vector<int>
 #define pqll priority_queue<ll>
 #define pqllg priority_queue<ll, vector<ll>, greater<ll>>
-
+#define pqi priority_queue<int>
+#define pqgi priority_queue<int, vector<int>, greater<int>>
+#define pb push_back
+#define eb emplace_back
 const ll INF = (1ll << 60);
-const ll mod = 1000000007;
 const double pi = 3.14159265358979323846;
+
+template<typename T>
+void printv(vector<T> &v){
+    for(auto e:v)cout << e << " ";
+    cout << "\n";
+}
+
 template <typename T>
 inline bool chmax(T &a, T b) {
     if (a < b) {
@@ -37,6 +53,7 @@ inline bool chmin(T &a, T b) {
     }
     return 0;
 }
+template<typename Tx, typename Ty>Tx dup(Tx x, Ty y){return (x+y-1)/y;}
 ll mypow(ll a, ll n) {
     ll ret = 1;
     rep(i, n) {
@@ -45,64 +62,49 @@ ll mypow(ll a, ll n) {
     }
     return ret;
 }
-long long modpow(long long a, long long n, long long mod) {
-    long long res = 1;
-    while (n > 0) {
-        if (n & 1) res = res * a % mod;
-        a = a * a % mod;
-        n >>= 1;
-    }
-    return res;
+ll modpow(ll a, ll n, ll mod){
+    if(n == 0) return 1;
+    a %= mod;
+    if(n % 2) return modpow(a, n-1, mod) * a % mod;
+    else return modpow(a*a%mod, n/2, mod);
 }
-
 long long modDiv(long long a, long long b, long long m) {
 	// Get the value of a/b
 	return (a * modpow(b, m - 2, m)) % m;
 }
 
-long long modSum1toX(long long X) {
-	// Calculate 1 + 2 + ... + X mod 1000000007
-	long long v1 = X % mod;
-	long long v2 = (X + 1) % mod;
-	long long v = v1 * v2 % mod;
-	return modDiv(v, 2, mod);
-}
-
-using Graph = vector<vector<long long>>;
-
-// 探索
-vector<bool> seen, finished;
-
-// サイクル復元のための情報
-int pos = -1; // サイクル中に含まれる頂点 pos
-stack<int> hist; // 訪問履歴
-
-void dfs(const Graph &G, int v, int p) {
-    seen[v] = true;
-    hist.push(v);
-    for (auto nv : G[v]) {
-        if (nv == p) continue; // 逆流を禁止する
-
-        // 完全終了した頂点はスルー
-        if (finished[nv]) continue;
-
-        // サイクルを検出
-        if (seen[nv] && !finished[nv]) {
-            pos = nv;
-            return;
-        }
-
-        // 再帰的に探索
-        dfs(G, nv, v);
-
-        // サイクル検出したならば真っ直ぐに抜けていく
-        if (pos != -1) return;
-    }
-    hist.pop();
-    finished[v] = true;
-}
-
 int main(){
-
+    int n, m;
+    cin >> n >> m;
+    vector<vector<int>> g(n);
+    rep(i, m){
+        int a, b;
+        cin >> a >> b;
+        a--, b--;
+        g[a].push_back(b);
+        g[b].push_back(a);
+    }
+    vvll dp(1<<n, vll(n, 0)); // dp[s][i]:今まで訪れた頂点集合がsで現在iにいる時のパスの総数
+    dp[1][0] = 1;
+    rep(s, 1<<n){
+        if(s==0)continue;
+        rep(v, n)if(s>>v&1){ // sにvがないのはありえない
+            for(auto nv:g[v]){
+                if(s>>nv&1)continue; //すでに訪れている場合無視
+                ll ns = (s | (1<<nv));
+                dp[ns][nv] += dp[s][v];
+            }
+        }
+    }
+    // rep(i, n){
+    //     for(auto nv:g[i]){
+    //         cout << nv << " ";
+    //     }
+    //     cout << endl;
+    // }
+    ll ans = 0;
+    // rep(s, 1<<n)printv(dp[s]);
+    rep(i, n)ans += dp[(1<<n)-1][i];
+    cout << ans << endl;
     return 0;
 }

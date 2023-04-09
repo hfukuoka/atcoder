@@ -26,10 +26,8 @@ using namespace atcoder;
 #define pqllg priority_queue<ll, vector<ll>, greater<ll>>
 #define pqi priority_queue<int>
 #define pqgi priority_queue<int, vector<int>, greater<int>>
-#define bit(x,i)(((x)>>(i))&1)
 #define pb push_back
 #define eb emplace_back
-#define mp make_pair
 
 const ll INF = (1ll << 60);
 const double pi = 3.14159265358979323846;
@@ -49,6 +47,7 @@ inline bool chmin(T &a, T b) {
     }
     return 0;
 }
+template<typename Tx, typename Ty>Tx dup(Tx x, Ty y){return (x+y-1)/y;}
 ll mypow(ll a, ll n) {
     ll ret = 1;
     rep(i, n) {
@@ -68,62 +67,37 @@ long long modDiv(long long a, long long b, long long m) {
 	return (a * modpow(b, m - 2, m)) % m;
 }
 
-using Graph = vector<vector<long long>>;
-
-/*  PrimeFact
-    init(N): 初期化。O(N log log N)
-    get(n): クエリ。素因数分解を求める。O(log n)
- */
-template <typename T>
-struct PrimeFact {
-    vector<T> spf;
-    PrimeFact(T N) { init(N); }
-    void init(T N) { // 前処理。spf を求める
-        spf.assign(N + 1, 0);
-        for (T i = 0; i <= N; i++) spf[i] = i;
-        for (T i = 2; i * i <= N; i++) {
-            if (spf[i] == i) {
-                for (T j = i * i; j <= N; j += i) {
-                    if (spf[j] == j) {
-                        spf[j] = i;
-                    }
-                }
-            }
-        }
-    }
-    map<T, T> get(T n) { // nの素因数分解を求める
-        map<T, T> m;
-        while (n != 1) {
-            m[spf[n]]++;
-            n /= spf[n];
-        }
-        return m;
-    }
-};
-
-template<typename T>
-struct BIT {
-    int n;
-    vector<T> d;
-    BIT(int n=0):n(n),d(n+1) {}
-    void add(int i, T x=1) {
-        for (i++; i <= n; i += i&-i) {
-            d[i] += x;
-        }
-        }
-    T sum(int i) {
-        T x = 0;
-        for (i++; i; i -= i&-i) {
-            x += d[i];
-        }
-        return x;
-    }
-    T sum(int l, int r) {
-        return sum(r-1) - sum(l-1);
-    }
-};
-
 int main(){
-
+    ll m, k;
+    cin >> m >> k;
+    if(m==0){
+        if(k==0)cout << "0 0" << endl;
+        else cout << -1 << endl;
+        return 0;
+    }
+    if(m==1){
+        if(k==0)cout << "0 0 1 1" << endl;
+        else cout << -1 << endl;
+        return 0;
+    }
+    if(k>=(1<<m)){
+        cout << -1 << endl;
+        return 0;
+    }
+    ll sz = 1<<(m+1); // 2^(m+1)
+    vll a(sz);
+    ll x = 0;
+    rep(i, sz/2-1){
+        if(x==k)x++;
+        a[i] = x;
+        a[sz-2-i] = x;
+        x++;
+    }
+    a[sz/2-1] = k;
+    a[sz-1] = k;
+    rep(i, sz){
+        cout << a[i] << " ";
+    }
+    cout << endl;
     return 0;
 }

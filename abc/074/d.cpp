@@ -68,6 +68,32 @@ long long modDiv(long long a, long long b, long long m) {
 }
 
 int main(){
-    
+    int a, b, c, d, e, f;
+    cin >> a >> b >> c >> d >> e >> f;
+    map<int, int> mp;
+    rep(i, f+1){
+        rep(j, f+1){
+            if(100*a*i + 100*b*j <= f) mp[100*a*i+100*b*j] = 0;
+        }
+    }
+    for(auto [w, s]:mp){
+        rep(x, f+1){
+            rep(y, f+1){
+                int sugar = c*x+d*y;
+                int sum = sugar+w;
+                if(sum>f)break;
+                if(sugar*(100+e) > e*sum)break;
+                chmax(mp[w], sugar);
+            }
+        }
+    }
+    int sum=100*a, sugar=0;
+    for(auto [w, s]:mp){
+        if(sugar*(s+w) < s*sum){
+            sugar = s;
+            sum = s+w;
+        }
+    }
+    cout << sum << " " << sugar << endl;
     return 0;
 }

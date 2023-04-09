@@ -31,6 +31,12 @@ using namespace atcoder;
 #define eb emplace_back
 #define mp make_pair
 
+template<typename T>
+void printv(vector<T> &v){
+    for(auto e:v)cout << e << " ";
+    cout << "\n";
+}
+
 const ll INF = (1ll << 60);
 const double pi = 3.14159265358979323846;
 template <typename T>
@@ -125,19 +131,36 @@ struct BIT {
 };
 
 int main(){
-    int n, m, k;
-    vi a(n);
+    ll n, m, k;
+    cin >> n >> m >> k;
+    vector<Pll> A(n);
     rep(i, n){
-        cin >> a[i];
+        ll a;
+        cin >> a;
+        A.push_back({0, a});
     }
-    int ans = 0;
-    vector<bool> use(n, true);
-    rep_down(i, 29, 0){ // i桁目を考える
-        int mask = 1<<(i+1) - 1; //00001111111
-        rep(i, n){
-            if(!use[i])continue;
-            if()
+    ll ans = 0;
+    sort(all(A));
+    for(ll d=31; d>=0; d--){
+        vector<Pll> B;
+        ll mask = (1LL<<d) - 1;
+        for(auto [c, a]:A){
+            if(a>>d&1)B.push_back({c, a&mask});
+            else {
+                a &= mask;
+                ll cost = (1LL<<d) - a + c;
+                a = 0;
+                B.push_back({cost, a});
+            }
+        }
+        sort(all(B));
+        ll sum = 0;
+        rep(i, k)sum += B[i].first;
+        if(sum<=m){
+            swap(A, B);
+            ans += (1LL<<d);
         }
     }
+    cout << ans << endl;
     return 0;
 }

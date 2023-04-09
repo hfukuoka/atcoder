@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
+# include<atcoder/all>
 using namespace std;
+using namespace atcoder;
 
 #define ll long long
 #define rep(i, n) for (ll i = 0; i < n; ++i)
@@ -87,7 +89,36 @@ void dfs(const Graph &G, int v, int p) {
     finished[v] = true;
 }
 
-int main(){
+using mint = modint998244353;
 
+int main(){
+    int n, l;
+    cin >> n >> l;
+    vector<int> v(n, 0);
+    rep(i, n){
+        string s;
+        cin >> s;
+        int m = s.size();
+        rep(j, m){
+            int c = s[j]-'a';
+            v[i] |= 1<<c;
+        }
+    }
+    mint ans = 0;
+    rep_up(s, 1, 1<<n){
+        int t = (1<<26)-1;
+        rep(i, n){
+            if((s>>i) & 1){
+                t &= v[i];
+            }
+        }
+        int all = __builtin_popcount((unsigned int)t);
+        if(__builtin_popcount((unsigned int)s)%2){
+            ans += mint(all).pow(l);
+        }else{
+            ans -= mint(all).pow(l);
+        }
+    }
+    cout << ans.val() << endl;
     return 0;
 }

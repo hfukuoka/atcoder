@@ -1,11 +1,17 @@
 #include <bits/stdc++.h>
+#include <atcoder/all>
 using namespace std;
+using namespace atcoder;
 
 #define ll long long
-#define rep(i, n) for (ll i = 0; i < n; ++i)
-#define rep_up(i, a, n) for (ll i = a; i < n; ++i)
-#define rep_down(i, a, n) for (ll i = a; i >= n; --i)
-#define P pair<ll, ll>
+#define repll(i, n) for (ll i = 0; i < n; ++i)
+#define rep_upll(i, a, n) for (ll i = a; i < n; ++i)
+#define rep_downll(i, a, n) for (ll i = a; i >= n; --i)
+#define Pll pair<ll, ll>
+#define rep(i, n) for (int i = 0; i < n; ++i)
+#define rep_up(i, a, n) for (int i = a; i < n; ++i)
+#define rep_down(i, a, n) for (int i = a; i >= n; --i)
+#define P pair<int, int>
 
 #define all(v) v.begin(), v.end()
 #define fi first
@@ -13,11 +19,17 @@ using namespace std;
 #define vvvll vector<vector<vector<ll>>>
 #define vvll vector<vector<ll>>
 #define vll vector<ll>
+#define vvvi vector<vector<vector<int>>>
+#define vvi vector<vector<int>>
+#define vi vector<int>
 #define pqll priority_queue<ll>
 #define pqllg priority_queue<ll, vector<ll>, greater<ll>>
+#define pqi priority_queue<int>
+#define pqgi priority_queue<int, vector<int>, greater<int>>
+#define pb push_back
+#define eb emplace_back
 
 const ll INF = (1ll << 60);
-const ll mod = 1000000007;
 const double pi = 3.14159265358979323846;
 template <typename T>
 inline bool chmax(T &a, T b) {
@@ -35,6 +47,7 @@ inline bool chmin(T &a, T b) {
     }
     return 0;
 }
+template<typename Tx, typename Ty>Tx dup(Tx x, Ty y){return (x+y-1)/y;}
 ll mypow(ll a, ll n) {
     ll ret = 1;
     rep(i, n) {
@@ -43,51 +56,73 @@ ll mypow(ll a, ll n) {
     }
     return ret;
 }
-long long modpow(long long a, long long n, long long mod) {
-    long long res = 1;
-    while (n > 0) {
-        if (n & 1) res = res * a % mod;
-        a = a * a % mod;
-        n >>= 1;
-    }
-    return res;
+ll modpow(ll a, ll n, ll mod){
+    if(n == 0) return 1;
+    a %= mod;
+    if(n % 2) return modpow(a, n-1, mod) * a % mod;
+    else return modpow(a*a%mod, n/2, mod);
+}
+long long modDiv(long long a, long long b, long long m) {
+	// Get the value of a/b
+	return (a * modpow(b, m - 2, m)) % m;
 }
 
-using Graph = vector<vector<long long>>;
+vector<int> seen;
+vector<vector<int>> G;
+vector<int> c;
 
-// 探索
-vector<bool> seen, finished;
 
-// サイクル復元のための情報
-int pos = -1; // サイクル中に含まれる頂点 pos
-stack<int> hist; // 訪問履歴
-
-void dfs(const Graph &G, int v, int p) {
+void dfs(int v, int id){
     seen[v] = true;
-    hist.push(v);
-    for (auto nv : G[v]) {
-        if (nv == p) continue; // 逆流を禁止する
-
-        // 完全終了した頂点はスルー
-        if (finished[nv]) continue;
-
-        // サイクルを検出
-        if (seen[nv] && !finished[nv]) {
-            pos = nv;
-            return;
-        }
-
-        // 再帰的に探索
-        dfs(G, nv, v);
-
-        // サイクル検出したならば真っ直ぐに抜けていく
-        if (pos != -1) return;
+    c[id]++;
+    for(auto nv:G[v]){
+        if(seen[nv])continue;
+        dfs(nv, id);
     }
-    hist.pop();
-    finished[v] = true;
 }
+
+using mint = modint998244353;
+
+vector<mint> mf, mg;
+
+mint f(int x){
+    if(mf[x]!=-1)return mf[x];
+    if(x==1) return mf[x] = 2;
+    if(x==2) return mf[x] = 3;
+    return mf[x] = f(x-1)+f(x-2);
+}
+
+mint g(int x){
+    if(mg[x]!=-1)return mg[x];
+    if(x==1) return mg[x] = 1;
+    if(x==2) return mg[x] = 3;
+    if(x==3) return mg[x] = 4;
+    return mg[x] = f(x-1) + f(x-3);
+}
+
 
 int main(){
-
+    int n;
+    cin >> n;
+    vector<int> p(n), q(n);
+    rep(i, n)cin >> p[i];
+    rep(i, n)cin >> q[i];
+    G.resize(n);
+    rep(i, n){
+        p[i]--, q[i]--;
+        G[p[i]].push_back(q[i]);
+        G[q[i]].push_back(p[i]);
+    }
+    seen.assign(n, false);
+    rep(i, n){
+        if(seen[i])continue;
+        c.push_back(0);
+        dfs(i, c.size()-1);
+    }
+    mf.assign(n+1, -1);
+    mg.assign(n+1, -1);
+    mint ans = 1;
+    for(auto m:c) ans *= g(m);
+    cout << ans.val() << endl;
     return 0;
 }
