@@ -120,7 +120,40 @@ struct BIT {
     }
 };
 
-int main(){
+void dfs(int v, vector<vector<int>> &g, vector<int> &table, int value, vector<int> &seen){
+    seen[v] = 1;
+    table[v] += value;
+    for(auto nv:g[v]){
+        if(seen[nv])continue;
+        dfs(nv, g, table, table[v], seen);
+    }
+    return;
+}
 
+int main(){
+    int n, q;
+    cin >> n >> q;
+    vector<vector<int>> g(n);
+    rep(i, n-1){
+        int a, b;
+        cin >> a >> b;
+        a--, b--;
+        g[a].push_back(b);
+        g[b].push_back(a);
+    }
+    vector<int> table(n, 0);
+    rep(i, q){
+        int p, x;
+        cin >> p >> x;
+        p--;
+        table[p] += x;
+    }
+    vector<int> seen(n, 0);
+    dfs(0, g, table, 0, seen);
+    rep(i, n){
+        cout << table[i];
+        if(i==n-1)cout << endl;
+        else cout << " ";
+    }
     return 0;
 }

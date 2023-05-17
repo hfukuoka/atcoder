@@ -73,24 +73,33 @@ long long modDiv(long long a, long long b, long long m) {
 	return (a * modpow(b, m - 2, m)) % m;
 }
 
+int di[4] = {0, 1, 0, -1};
+int dj[4] = {1, 0, -1, 0};
+
+void dfs(int i, int j, int h, int w, vector<vector<int>> &f, vector<vector<int>> &seen, int &ans, int count){
+    seen[i][j] = 1;
+    chmax(ans, count+1);
+    rep(v, 4){
+        int ni = i+di[v];
+        int nj = j+dj[v];
+        if(ni<0 || ni>=h || nj<0 || nj>=w)continue;
+        if(f[ni][nj]==0)continue;
+        if(seen[ni][nj])continue;
+        dfs(ni, nj, h, w, f, seen, ans, count+1);
+    }
+    seen[i][j] = 0;
+}
+
 int main(){
-    string s;
-    cin >> s;
-    int x = -1, y = -1;
-    bool ok = true;
-    rep(i, 8){
-        if(s[i]=='B'){
-            if(x==-1)x = i+1;
-            else y = i+1;
-        }
+    int h, w;
+    cin >> w >> h;
+    vector<vector<int>> f(h, vector<int>(w));
+    rep(i, h)rep(j, w)cin >> f[i][j];
+    int ans = 0;
+    vector<vector<int>> seen(h, vector<int>(w, 0));
+    rep(i, h)rep(j, w){
+        if(f[i][j])dfs(i, j, h, w, f, seen, ans, 0);
     }
-    if((x%2)==(y%2))ok = false;
-    int f = 0;
-    rep(i, 8){
-        if(s[i]=='R')f = 1-f;
-        if(s[i]=='K' && f==0)ok = false;
-    }
-    if(ok)cout << "Yes" << endl;
-    else cout << "No" << endl;
+    cout << ans << endl;
     return 0;
 }

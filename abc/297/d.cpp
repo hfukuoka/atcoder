@@ -74,6 +74,21 @@ long long modDiv(long long a, long long b, long long m) {
 }
 
 int main(){
-
+    ll a, b;
+    cin >> a >> b;
+    ll ans = 0;
+    while(1){
+        if(a>b){
+            ans += a/b;
+            a = a % b;
+            if(a==0)break;
+        }else{
+            ans += b/a;
+            b = b%a;
+            if(b==0)break;
+        }
+    }
+    ans--;
+    cout << ans << endl;
     return 0;
 }

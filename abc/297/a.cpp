@@ -74,6 +74,16 @@ long long modDiv(long long a, long long b, long long m) {
 }
 
 int main(){
-    
+    ll n, d;
+    cin >> n >> d;
+    vector<ll> t(n);
+    rep(i, n)cin >> t[i];
+    rep(i, n-1){
+        if(t[i+1]-t[i]<=d){
+            cout << t[i+1] << endl;
+            return 0;
+        }
+    }
+    cout << -1 << endl;
     return 0;
 }

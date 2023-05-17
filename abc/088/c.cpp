@@ -74,23 +74,6 @@ long long modDiv(long long a, long long b, long long m) {
 }
 
 int main(){
-    string s;
-    cin >> s;
-    int x = -1, y = -1;
-    bool ok = true;
-    rep(i, 8){
-        if(s[i]=='B'){
-            if(x==-1)x = i+1;
-            else y = i+1;
-        }
-    }
-    if((x%2)==(y%2))ok = false;
-    int f = 0;
-    rep(i, 8){
-        if(s[i]=='R')f = 1-f;
-        if(s[i]=='K' && f==0)ok = false;
-    }
-    if(ok)cout << "Yes" << endl;
-    else cout << "No" << endl;
+
     return 0;
 }

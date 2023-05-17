@@ -73,24 +73,63 @@ long long modDiv(long long a, long long b, long long m) {
 	return (a * modpow(b, m - 2, m)) % m;
 }
 
-int main(){
-    string s;
-    cin >> s;
-    int x = -1, y = -1;
-    bool ok = true;
-    rep(i, 8){
-        if(s[i]=='B'){
-            if(x==-1)x = i+1;
-            else y = i+1;
+struct Edge {
+    long long to;
+    long long cost;
+};
+using Graph = vector<vector<Edge>>;
+
+/* dijkstra(G,s,dis)
+    入力：グラフ G, 開始点 s, 距離を格納する dis
+    計算量：O(|E|log|V|)
+    副作用：dis が書き換えられる
+*/
+void dijkstra(const Graph &G, int s, vector<long long> &dis) {
+    int N = G.size();
+    dis.assign(N, INF);
+    priority_queue<Pll, vector<Pll>, greater<Pll>> pq;  // 「仮の最短距離, 頂点」が小さい順に並ぶ
+    dis[s] = 0;
+    pq.emplace(dis[s], s);
+    while (!pq.empty()) {
+        Pll p = pq.top();
+        pq.pop();
+        int v = p.second;
+        if (dis[v] < p.first) {  // 最短距離で無ければ無視
+            continue;
+        }
+        for (auto &e : G[v]) {
+            if (dis[e.to] > dis[v] + e.cost) {  // 最短距離候補なら priority_queue に追加
+                dis[e.to] = dis[v] + e.cost;
+                pq.emplace(dis[e.to], e.to);
+            }
         }
     }
-    if((x%2)==(y%2))ok = false;
-    int f = 0;
-    rep(i, 8){
-        if(s[i]=='R')f = 1-f;
-        if(s[i]=='K' && f==0)ok = false;
+}
+
+int main(){
+    int n, k;
+    cin >> n >> k;
+    Graph g(n);
+    rep(i, k){
+        int t;
+        cin >> t;
+        if(t==0){
+            ll a, b;
+            cin >> a >> b;
+            a--, b--;
+            vector<ll> dist(n, INF);
+            dist[a] = 0;
+            dijkstra(g, a, dist);
+            ll ans = dist[b];
+            if(ans>=INF)ans = -1;
+            cout << ans << endl;
+        }else{
+            ll a, b, c;
+            cin >> a >> b >> c;
+            a--, b--;
+            g[a].push_back({b, c});
+            g[b].push_back({a, c});
+        }
     }
-    if(ok)cout << "Yes" << endl;
-    else cout << "No" << endl;
     return 0;
 }

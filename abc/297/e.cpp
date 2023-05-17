@@ -74,6 +74,22 @@ long long modDiv(long long a, long long b, long long m) {
 }
 
 int main(){
-
+    int n;
+    ll k;
+    cin >> n >> k;
+    vll a(n);
+    rep(i, n)cin >> a[i];
+    priority_queue<ll, vector<ll>, greater<ll>> pq;
+    vll ans;
+    pq.push(0);
+    rep(i, k+1){
+        if(i>0){
+            while(pq.top()==ans[i-1])pq.pop();
+        }
+        ll v = pq.top(); pq.pop();
+        ans.push_back(v);
+        rep(j, n)pq.push(v+a[j]);
+    }
+    cout << ans[k] << endl;
     return 0;
 }

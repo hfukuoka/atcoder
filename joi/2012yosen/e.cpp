@@ -73,24 +73,48 @@ long long modDiv(long long a, long long b, long long m) {
 	return (a * modpow(b, m - 2, m)) % m;
 }
 
+// (i, j)の隣接する座標との差分のペア
+pair<array<int, 6>, array<int, 6>> adjacent_diff(int i, int j){
+    if(i%2==0){
+        array<int, 6> di = {0, 1, 0, -1, -1, 1};
+        array<int, 6> dj = {1, 0, -1, 0, -1, -1};
+        return {di, dj};
+    }else{
+        array<int, 6> di = {0, 1, 0, -1, -1, 1};
+        array<int, 6> dj = {1, 0, -1, 0, 1, 1};
+        return {di, dj};
+    }
+}
+
 int main(){
-    string s;
-    cin >> s;
-    int x = -1, y = -1;
-    bool ok = true;
-    rep(i, 8){
-        if(s[i]=='B'){
-            if(x==-1)x = i+1;
-            else y = i+1;
+    int h, w;
+    cin >> w >> h;
+    int H = h+2;
+    int W = w+2;
+    vector<vector<int>> c(H, vector<int>(W, 0));
+    rep(i, h)rep(j, w)cin >> c[i+1][j+1];
+    int ans = 0;
+    queue<pair<int, int>> q;
+    q.push({0, 0});
+    vector<vector<int>> seen(H, vector<int>(W, 0));
+    seen[0][0] = 1;
+    while(!q.empty()){
+        auto [i, j] = q.front(); q.pop();
+        auto [di, dj] = adjacent_diff(i, j);
+        rep(v, 6){
+            int ni = i+di[v];
+            int nj = j+dj[v];
+            if(ni<0 || ni>=H || nj<0 || nj>=W)continue;
+            if(c[ni][nj]==1){
+                ans++;
+                // cout << ni << " " << nj << endl;
+                continue;
+            }
+            if(seen[ni][nj])continue;
+            seen[ni][nj] = 1;
+            q.push({ni, nj});
         }
     }
-    if((x%2)==(y%2))ok = false;
-    int f = 0;
-    rep(i, 8){
-        if(s[i]=='R')f = 1-f;
-        if(s[i]=='K' && f==0)ok = false;
-    }
-    if(ok)cout << "Yes" << endl;
-    else cout << "No" << endl;
+    cout << ans << endl;
     return 0;
 }

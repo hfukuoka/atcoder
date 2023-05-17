@@ -73,24 +73,45 @@ long long modDiv(long long a, long long b, long long m) {
 	return (a * modpow(b, m - 2, m)) % m;
 }
 
+int di[4] = {0, 1, 0, -1};
+int dj[4] = {1, 0, -1, 0};
+
 int main(){
-    string s;
-    cin >> s;
-    int x = -1, y = -1;
-    bool ok = true;
-    rep(i, 8){
-        if(s[i]=='B'){
-            if(x==-1)x = i+1;
-            else y = i+1;
+    int h, w, n;
+    cin >> h >> w >> n;
+    vector<vector<char>> c(h, vector<char>(w));
+    vector<pair<int, int>> t(n+1);
+    rep(i, h)rep(j, w){
+        cin >> c[i][j];
+        int cnum = c[i][j] - '0';
+        if(c[i][j]=='S'){
+            t[0] = {i, j};
+        }else if(1<=cnum && cnum<=n){
+            t[cnum] = {i, j};
         }
     }
-    if((x%2)==(y%2))ok = false;
-    int f = 0;
-    rep(i, 8){
-        if(s[i]=='R')f = 1-f;
-        if(s[i]=='K' && f==0)ok = false;
+    int ans = 0;
+    rep(i, n){
+        queue<pair<int, int>> q;
+        q.push({t[i]});
+        vector<vector<int>> d(h, vector<int>(w, -1));
+        auto [si, sj] = t[i];
+        auto [gi, gj] = t[i+1];
+        d[si][sj] = 0;
+        while(!q.empty()){
+            auto [i, j] = q.front(); q.pop();
+            rep(v, 4){
+                int ni = i+di[v];
+                int nj = j+dj[v];
+                if(ni<0 || ni>=h || nj<0 || nj>=w)continue;
+                if(c[ni][nj]=='X')continue;
+                if(d[ni][nj]!=-1)continue;
+                d[ni][nj] = d[i][j]+1;
+                q.push({ni, nj});
+            }
+        }
+        ans += d[gi][gj];
     }
-    if(ok)cout << "Yes" << endl;
-    else cout << "No" << endl;
+    cout << ans << endl;
     return 0;
 }
